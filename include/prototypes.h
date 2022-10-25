@@ -147,6 +147,7 @@
     void update_water(map_t *map, int x, int y, data_t data);
     void update_black_hole(map_t *map, int x, int y);
     void update_stone(map_t *map, int x, int y);
+    void update_acid(map_t *map, int x, int y, data_t data);
 
     // Brush
     void update_brush(core_t *c);

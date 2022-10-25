@@ -39,6 +39,7 @@ SRC	=       src/grid/update.c	\
                 src/level/load.c	\
                 src/render/draw.c	\
                 src/core.c	\
+                src/materials/acid/update.c	\
                 src/materials/stone/update.c	\
                 src/materials/black_hole/update.c	\
                 src/materials/water/update.c	\

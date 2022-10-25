@@ -19,6 +19,8 @@ static void update_voxel(map_t *map, int x, int y)
         update_stone(map, x, y);
     if (map->grid[x][y].data.id == 4)
         update_black_hole(map, x, y);
+    if (map->grid[x][y].data.id == 5)
+        update_acid(map, x, y, map->grid[x][y].data);
 }
 
 void update_grid(core_t *c)
@@ -27,9 +29,9 @@ void update_grid(core_t *c)
     bool ran = random_number(0, 1);
 
     if (!c->events.paused) {
-        for (int y = c->map.dim.y - 1; y > 0; y--) {
+        for (int y = c->map.dim.y - 1; y >= 0; y--) {
             if (ran) {
-                for (int x = c->map.dim.x - 1; x > 0 ; x--)
+                for (int x = c->map.dim.x - 1; x >= 0 ; x--)
                     update_voxel(&c->map, x, y);
             } else {
                 for (int x = 0; x < c->map.dim.x; x++)

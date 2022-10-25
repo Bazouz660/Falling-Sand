@@ -9,8 +9,6 @@
 
 void update_black_hole(map_t *map, int x, int y)
 {
-
-
     if (map->grid[x][y + 1].data.id != 4)
         destroy_voxel(&map->grid[x][y + 1].data);
     if (map->grid[x][y - 1].data.id != 4)

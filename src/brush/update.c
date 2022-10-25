@@ -43,7 +43,7 @@ data_t create_data(int id)
         data.id = 2;
         data.density = 9.97;
         data.color = sfCyan;
-        data.color = darken_color(data.color, random_number(80, 100) / 100.0);
+        data.color = darken_color(data.color, random_number(90, 100) / 100.0);
         data.velocity = (sfVector2i){10, gravity};
     }
     if (id == 3) {
@@ -61,6 +61,14 @@ data_t create_data(int id)
         data.color = darken_color(sfRed, 0.3);
         data.color = darken_color(data.color, random_number(80, 100) / 100.0);
         data.velocity = (sfVector2i){0, 0};
+    }
+    if (id == 5) {
+        data.has_updated = false;
+        data.id = 5;
+        data.density = 1.05;
+        data.color = sfGreen;
+        data.color = darken_color(data.color, random_number(95, 100) / 100.0);
+        data.velocity = (sfVector2i){8, gravity};
     }
     return data;
 }
@@ -135,6 +143,8 @@ void select_voxel(core_t *c)
         c->brush.id = 3;
     if (key_pressed(sfKeyNum4))
         c->brush.id = 4;
+    if (key_pressed(sfKeyNum5))
+        c->brush.id = 5;
 }
 
 void update_brush(core_t *c)
