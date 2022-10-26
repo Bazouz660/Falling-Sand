@@ -5,7 +5,7 @@
 ** utils.c
 */
 
-#include "structs.h"
+#include "prototypes.h"
 
 sfVector2i get_mouse_grid(core_t *c)
 {
@@ -44,6 +44,12 @@ void swap_voxel(data_t *a, data_t *b)
     a->has_updated = true;
 }
 
+void copy_voxel(data_t *dest, data_t *src)
+{
+    *dest = *src;
+    dest->has_updated = true;
+}
+
 void destroy_voxel(data_t *a)
 {
     if (a->id == 0)
@@ -52,7 +58,20 @@ void destroy_voxel(data_t *a)
     a->density = 0;
     a->has_updated = false;
     a->id = 0;
+    a->state = -1;
     a->life_time = 0;
+    a->life_counter = 0;
+    a->inertia = (sfVector2i){0, 0};
     a->speed = (sfVector2u){0, 0};
     a->velocity = (sfVector2i){0, 0};
+}
+
+bool update_voxel_life_time(clock_st clock, data_t *data)
+{
+    data->life_counter += clock.frame_delta;
+    if (data->life_counter >= data->life_time && random_number(-100, 10) > 0) {
+        destroy_voxel(data);
+        return false;
+    }
+    return true;
 }

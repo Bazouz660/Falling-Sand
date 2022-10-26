@@ -39,10 +39,17 @@ SRC	=       src/grid/update.c	\
                 src/level/load.c	\
                 src/render/draw.c	\
                 src/core.c	\
+                src/materials/gas.c	\
+                src/materials/liquid.c	\
+                src/materials/movable_solid.c	\
+                src/materials/static_solid.c	\
+                src/materials/static_solid.c	\
+                src/materials/clone/update.c	\
                 src/materials/acid/update.c	\
                 src/materials/stone/update.c	\
                 src/materials/black_hole/update.c	\
-                src/materials/water/update.c	\
+                src/materials/water/update_liquid.c	\
+                src/materials/water/update_gas.c	\
                 src/materials/sand/update.c	\
                 src/matrix/matrix.c	\
                 src/inits/init.c	\

@@ -26,18 +26,40 @@
         float **data;
     } matrix_t;
 
+    typedef enum materials_e {
+        empty,
+        sand,
+        water,
+        stone,
+        black_hole,
+        acid,
+        clone,
+        steam,
+    } materials_e;
+
+    typedef enum states_e {
+        movable_solid,
+        static_solid,
+        liquid,
+        gas,
+    } states_e;
+
     typedef struct data_s {
         int id;
         float life_time;
+        float life_counter;
         float density;
         bool has_updated;
+        short state;
         sfVector2i velocity;
+        sfVector2i inertia;
         sfVector2u speed;
         sfColor color;
     } data_t;
 
     typedef struct voxel_s {
         data_t data;
+        data_t stored_data;
         sfVector2u pos;
     } voxel_t;
 

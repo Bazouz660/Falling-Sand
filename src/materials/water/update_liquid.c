@@ -7,7 +7,7 @@
 
 #include "prototypes.h"
 
-void update_sand(map_t *map, int x, int y)
+void update_water(map_t *map, int x, int y, data_t *data)
 {
-    move_movable_solid(map, x, y);
+    move_liquid(map, x, y, data);
 }

@@ -118,7 +118,9 @@ void init_map(core_t *c)
             c->map.grid[x][y].data.has_updated = false;
             c->map.grid[x][y].data.life_time = -1;
             c->map.grid[x][y].data.color = sfBlack;
-            c->map.grid[x][y].data.density = 0;
+            c->map.grid[x][y].data.inertia = (sfVector2i){0, 0};
+            c->map.grid[x][y].data.density = -1;
+            destroy_voxel(&c->map.grid[x][y].stored_data);
             c->map.buffer[index].position = pos;
             c->map.buffer[index].color = c->map.grid[x][y].data.color;
             index++;

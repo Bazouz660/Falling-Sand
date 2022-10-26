@@ -25,50 +25,97 @@ data_t create_data(int id)
 
     if (id == 0) {
         data.has_updated = false;
-        data.id = 0;
+        data.id = empty;
         data.density = 0;
         data.color = sfBlack;
+        data.state = -1;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.velocity = (sfVector2i){1, gravity};
+
     }
     if (id == 1) {
         data.has_updated = false;
-        data.id = 1;
+        data.id = sand;
         data.density = 18.5;
         data.color = sfYellow;
+        data.state = movable_solid;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.color = darken_color(data.color, random_number(70, 100) / 100.0);
         data.velocity = (sfVector2i){1, gravity};
     }
     if (id == 2) {
         data.has_updated = false;
-        data.id = 2;
+        data.id = water;
         data.density = 9.97;
         data.color = sfCyan;
+        data.state = liquid;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.color = darken_color(data.color, random_number(90, 100) / 100.0);
         data.velocity = (sfVector2i){10, gravity};
     }
     if (id == 3) {
         data.has_updated = false;
-        data.id = 3;
+        data.id = stone;
         data.density = 24.5;
+        data.state = static_solid;
         data.color = darken_color(sfWhite, 0.8);
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.color = darken_color(data.color, random_number(80, 100) / 100.0);
         data.velocity = (sfVector2i){0, 0};
     }
     if (id == 4) {
         data.has_updated = false;
-        data.id = 4;
+        data.id = black_hole;
+        data.state = static_solid;
         data.density = 1000000;
         data.color = darken_color(sfRed, 0.3);
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.color = darken_color(data.color, random_number(80, 100) / 100.0);
         data.velocity = (sfVector2i){0, 0};
     }
     if (id == 5) {
         data.has_updated = false;
-        data.id = 5;
+        data.id = acid;
         data.density = 1.05;
+        data.state = liquid;
         data.color = sfGreen;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
         data.color = darken_color(data.color, random_number(95, 100) / 100.0);
         data.velocity = (sfVector2i){8, gravity};
+    }
+    if (id == 6) {
+        data.has_updated = false;
+        data.id = clone;
+        data.density = 300.0;
+        data.state = static_solid;
+        data.color = sfYellow;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = INFINITY;
+        data.life_counter = 0;
+        data.velocity = (sfVector2i){0, 0};
+    }
+    if (id == 7) {
+        data.has_updated = false;
+        data.id = steam;
+        data.density = 0.6;
+        data.state = gas;
+        data.inertia = (sfVector2i){0, 0};
+        data.life_time = 10.0;
+        data.life_counter = 0;
+        data.color = smooth_color(sfCyan, sfWhite, 0.6);
+        data.velocity = (sfVector2i){5, gravity};
     }
     return data;
 }
@@ -104,8 +151,12 @@ void place_in_range(core_t *c, sfVector2i center, int radius, int id)
         for (int x = -radius - 1; x <= radius; x++) {
             if (inside_circle(center, (sfVector2i){center.x + x, center.y + y}, radius)) {
               if (is_in_grid(&c->map, (sfVector2i){center.x + x, center.y + y}))
-                  if (c->map.grid[center.x + x][center.y + y].data.id == 0 || id == 0)
-                      c->map.grid[center.x + x][center.y + y].data = create_data(id);
+                  if (c->map.grid[center.x + x][center.y + y].data.id == 0 || id == 0) {
+                    if (id == 0)
+                        destroy_voxel(&c->map.grid[center.x + x][center.y + y].data);
+                    else
+                        c->map.grid[center.x + x][center.y + y].data = create_data(id);
+                  }
             }
         }
     }
@@ -145,6 +196,10 @@ void select_voxel(core_t *c)
         c->brush.id = 4;
     if (key_pressed(sfKeyNum5))
         c->brush.id = 5;
+    if (key_pressed(sfKeyNum6))
+        c->brush.id = 6;
+    if (key_pressed(sfKeyNum7))
+        c->brush.id = 7;
 }
 
 void update_brush(core_t *c)

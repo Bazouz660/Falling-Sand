@@ -141,13 +141,22 @@
     sfVector2i get_mouse_grid(core_t *c);
     void update_grid(core_t *c);
     void destroy_voxel(data_t *a);
+    void copy_voxel(data_t *dest, data_t *src);
+    bool update_voxel_life_time(clock_st clock, data_t *data);
 
     // Materials
     void update_sand(map_t *map, int x, int y);
-    void update_water(map_t *map, int x, int y, data_t data);
+    void update_water(map_t *map, int x, int y, data_t *data);
     void update_black_hole(map_t *map, int x, int y);
     void update_stone(map_t *map, int x, int y);
-    void update_acid(map_t *map, int x, int y, data_t data);
+    void update_acid(map_t *map, int x, int y, data_t *data);
+    void update_clone(map_t *map, int x, int y);
+    void update_steam(clock_st clock, map_t *map, int x, int y);
+
+    // States
+    void move_gas(map_t *map, int x, int y, data_t data);
+    void move_liquid(map_t *map, int x, int y, data_t *data);
+    void move_movable_solid(map_t *map, int x, int y);
 
     // Brush
     void update_brush(core_t *c);
