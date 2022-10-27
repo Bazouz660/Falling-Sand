@@ -120,6 +120,7 @@
     // UI
     void draw_main_menu(core_t *c);
     void draw_select_menu(core_t *c);
+    void update_ui(core_t *c);
 
     // Rendering
 
@@ -143,19 +144,23 @@
     void destroy_voxel(data_t *a);
     void copy_voxel(data_t *dest, data_t *src);
     bool update_voxel_life_time(clock_st clock, data_t *data);
+    void update_heat(map_t *map, int x, int y);
+    data_t create_data(int id);
 
     // Materials
     void update_sand(map_t *map, int x, int y);
-    void update_water(map_t *map, int x, int y, data_t *data);
+    void update_water(map_t *map, int x, int y);
     void update_black_hole(map_t *map, int x, int y);
     void update_stone(map_t *map, int x, int y);
-    void update_acid(map_t *map, int x, int y, data_t *data);
+    void update_acid(map_t *map, int x, int y);
     void update_clone(map_t *map, int x, int y);
     void update_steam(clock_st clock, map_t *map, int x, int y);
+    void update_lava(clock_st clock, map_t *map, int x, int y);
+    void update_ice(map_t *map, int x, int y);
 
     // States
-    void move_gas(map_t *map, int x, int y, data_t data);
-    void move_liquid(map_t *map, int x, int y, data_t *data);
+    void move_gas(map_t *map, int x, int y);
+    void move_liquid(map_t *map, int x, int y);
     void move_movable_solid(map_t *map, int x, int y);
 
     // Brush

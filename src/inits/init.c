@@ -13,15 +13,15 @@
 void init_fps_text(core_t *c)
 {
     c->ui.font = sfFont_createFromFile("misc/font.ttf");
-    c->render.fps_hint = sfText_create();
-    sfText_setFont(c->render.fps_hint, c->ui.font);
-    sfText_setColor(c->render.fps_hint, sfWhite);
-    sfText_setPosition(c->render.fps_hint, (sfVector2f){c->render.w_size.x / 30.0,
+    c->ui.fps_hint = sfText_create();
+    sfText_setFont(c->ui.fps_hint, c->ui.font);
+    sfText_setColor(c->ui.fps_hint, sfWhite);
+    sfText_setPosition(c->ui.fps_hint, (sfVector2f){c->render.w_size.x / 30.0,
     c->render.w_size.y / 25.0});
-    sfText_setString(c->render.fps_hint, NULL);
-    sfText_setOutlineColor(c->render.fps_hint, sfBlack);
-    sfText_setOutlineThickness(c->render.fps_hint, 1);
-    sfText_setCharacterSize(c->render.fps_hint, c->render.w_size.x / 40);
+    sfText_setString(c->ui.fps_hint, NULL);
+    sfText_setOutlineColor(c->ui.fps_hint, sfBlack);
+    sfText_setOutlineThickness(c->ui.fps_hint, 1);
+    sfText_setCharacterSize(c->ui.fps_hint, c->render.w_size.x / 40);
 }
 
 void init_view(core_t *c)
@@ -77,12 +77,24 @@ void init_ui_view(core_t *c)
     c->ui.view = sfView_copy(c->render.view);
 }
 
+void init_voxel_info(core_t *c)
+{
+    c->ui.voxel_info = sfText_copy(c->ui.fps_hint);
+
+    sfText_setCharacterSize(c->ui.voxel_info, 20);
+    sfText_setString(c->ui.voxel_info, "Empty");
+    sfText_setPosition(c->ui.voxel_info, (sfVector2f){c->render.w_size.x * 0.95,
+    c->render.w_size.y / 25.0});
+    sfText_setOrigin(c->ui.voxel_info, get_text_center(c->ui.voxel_info));
+}
+
 void init_ui(core_t *c)
 {
     init_fps_text(c);
     init_background(c);
     init_buttons(c);
     init_ui_view(c);
+    init_voxel_info(c);
 }
 
 void init_keys(core_t *c)
@@ -90,7 +102,7 @@ void init_keys(core_t *c)
     c->events.keys.toggleable = malloc(sizeof(switch_key_t) * (3));
     init_toggleable_key(&c->events.keys.toggleable[0], sfKeyF11,
     &toggle_fullscreen);
-    init_toggleable_key(&c->events.keys.toggleable[1], sfKeyP, &toggle_pause);
+    init_toggleable_key(&c->events.keys.toggleable[1], sfKeySpace, &toggle_pause);
     c->events.keys.toggleable[2].index = -1;
 }
 
@@ -113,13 +125,7 @@ void init_map(core_t *c)
         c->map.grid[x] = malloc(sizeof(voxel_t) * (dim.y + 1));
         for (int y = 0; y < c->map.dim.y; y++) {
             pos.y = y;
-            c->map.grid[x][y].data.id = 0;
-            c->map.grid[x][y].data.speed = (sfVector2u){1, 1};
-            c->map.grid[x][y].data.has_updated = false;
-            c->map.grid[x][y].data.life_time = -1;
-            c->map.grid[x][y].data.color = sfBlack;
-            c->map.grid[x][y].data.inertia = (sfVector2i){0, 0};
-            c->map.grid[x][y].data.density = -1;
+            c->map.grid[x][y].data = create_data(empty);
             destroy_voxel(&c->map.grid[x][y].stored_data);
             c->map.buffer[index].position = pos;
             c->map.buffer[index].color = c->map.grid[x][y].data.color;

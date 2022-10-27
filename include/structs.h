@@ -35,6 +35,8 @@
         acid,
         clone,
         steam,
+        lava,
+        ice,
     } materials_e;
 
     typedef enum states_e {
@@ -49,6 +51,8 @@
         float life_time;
         float life_counter;
         float density;
+        float conductivity;
+        float temperature;
         bool has_updated;
         short state;
         sfVector2i velocity;
@@ -110,7 +114,6 @@
         sfVector2u r_size;
         sfVector2u w_size;
         sfView *view;
-        sfText *fps_hint;
         bool fullscreen;
         unsigned short scene;
     } render_t;
@@ -160,6 +163,8 @@
     typedef struct ui_s {
         sfView *view;
         sfFont *font;
+        sfText *fps_hint;
+        sfText *voxel_info;
         button_t **button;
         bool mouse_released;
         unsigned short selected_level;

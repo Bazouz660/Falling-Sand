@@ -48,6 +48,7 @@ void update_mouse(core_t *c)
 
 void render_game(core_t *c)
 {
+    update_ui(c);
     update_brush(c);
     update_grid(c);
     draw_all(c);

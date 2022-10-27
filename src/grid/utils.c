@@ -30,7 +30,7 @@ bool is_in_grid(map_t *map, sfVector2i pos)
 {
     sfVector2i dim = map->dim;
 
-    if (pos.x < dim.x - 1 && pos.x >= 0 && pos.y < dim.y && pos.y >= 0)
+    if (pos.x < dim.x - 1 && pos.x >= 0 && pos.y < dim.y - 1 && pos.y >= 0)
         return true;
     return false;
 }
@@ -54,16 +54,7 @@ void destroy_voxel(data_t *a)
 {
     if (a->id == 0)
         return;
-    a->color = sfBlack;
-    a->density = 0;
-    a->has_updated = false;
-    a->id = 0;
-    a->state = -1;
-    a->life_time = 0;
-    a->life_counter = 0;
-    a->inertia = (sfVector2i){0, 0};
-    a->speed = (sfVector2u){0, 0};
-    a->velocity = (sfVector2i){0, 0};
+    *a = create_data(empty);
 }
 
 bool update_voxel_life_time(clock_st clock, data_t *data)
@@ -74,4 +65,79 @@ bool update_voxel_life_time(clock_st clock, data_t *data)
         return false;
     }
     return true;
+}
+
+float get_conductivity(int id)
+{
+    if (id < 0 || id > 8)
+        return 0;
+    return create_data(id).conductivity;
+}
+
+void transfer_heat(data_t *a, data_t *b)
+{
+    float transfered_heat = 0;
+
+    if (a->id == empty || b->id == empty || a->has_updated == true)
+        return;
+
+    float temp1 = a->temperature / 4.0;
+    float temp2 = b->temperature / 4.0;
+
+
+    if (temp1 > temp2) {
+        transfered_heat = (temp1 - temp2) * get_min(a->conductivity / 10.0, b->conductivity / 10.0);
+        b->temperature += transfered_heat;
+        a->temperature -= transfered_heat;
+        b->temperature > 10000 ? b->temperature = 10000 : 0;
+        a->temperature < -253 ? a->temperature = -253 : 0;
+    } else if (temp1 < temp2) {
+        transfered_heat = (temp2 - temp1) * get_min(a->conductivity / 10.0, b->conductivity / 10.0);
+        a->temperature += transfered_heat;
+        b->temperature -= transfered_heat;
+        a->temperature > 10000 ? a->temperature = 10000 : 0;
+        b->temperature < -253 ? b->temperature = -253 : 0;
+    }
+}
+
+void ambient_heat(data_t *a, int x, int y)
+{
+    float transfered_heat = 0;
+
+    float temp1 = a->temperature / 4.0;
+    float temp2 = 20;
+
+    if (temp1 > temp2) {
+        transfered_heat = (temp1 - temp2) * (a->conductivity / 10000.0);
+        a->temperature -= transfered_heat;
+        a->temperature < -253 ? a->temperature = -253 : 0;
+    } else if (temp1 < temp2) {
+        transfered_heat = (temp2 - temp1) * (a->conductivity / 10000.0);
+        a->temperature += transfered_heat;
+        a->temperature > 10000 ? a->temperature = 10000 : 0;
+    }
+}
+
+void update_heat(map_t *map, int x, int y)
+{
+    ambient_heat(&map->grid[x][y].data, x, y);
+    if (is_in_grid(map, (sfVector2i){x, y + 1}))
+        if (map->grid[x][y + 1].data.temperature != map->grid[x][y].data.temperature) {
+            transfer_heat(&map->grid[x][y + 1].data, &map->grid[x][y].data);
+        }
+
+    if (is_in_grid(map, (sfVector2i){x, y - 1}))
+        if (map->grid[x][y - 1].data.temperature != map->grid[x][y].data.temperature) {
+            transfer_heat(&map->grid[x][y - 1].data, &map->grid[x][y].data);
+        }
+
+    if (is_in_grid(map, (sfVector2i){x + 1, y}))
+        if (map->grid[x + 1][y].data.temperature != map->grid[x][y].data.temperature) {
+            transfer_heat(&map->grid[x + 1][y].data, &map->grid[x][y].data);
+        }
+
+    if (is_in_grid(map, (sfVector2i){x - 1, y}))
+        if (map->grid[x - 1][y].data.temperature != map->grid[x][y].data.temperature) {
+            transfer_heat(&map->grid[x - 1][y].data, &map->grid[x][y].data);
+        }
 }

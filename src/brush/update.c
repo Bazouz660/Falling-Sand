@@ -28,18 +28,21 @@ data_t create_data(int id)
         data.id = empty;
         data.density = 0;
         data.color = sfBlack;
+        data.temperature = 20;
+        data.conductivity = 0.026;
         data.state = -1;
         data.inertia = (sfVector2i){0, 0};
         data.life_time = INFINITY;
         data.life_counter = 0;
         data.velocity = (sfVector2i){1, gravity};
-
     }
     if (id == 1) {
         data.has_updated = false;
         data.id = sand;
         data.density = 18.5;
         data.color = sfYellow;
+        data.temperature = 20;
+        data.conductivity = 0.2;
         data.state = movable_solid;
         data.inertia = (sfVector2i){0, 0};
         data.life_time = INFINITY;
@@ -51,7 +54,9 @@ data_t create_data(int id)
         data.has_updated = false;
         data.id = water;
         data.density = 9.97;
-        data.color = sfCyan;
+        data.color = smooth_color(sfBlue, sfCyan, 0.3);
+        data.temperature = 20;
+        data.conductivity = 0.59;
         data.state = liquid;
         data.inertia = (sfVector2i){0, 0};
         data.life_time = INFINITY;
@@ -65,6 +70,8 @@ data_t create_data(int id)
         data.density = 24.5;
         data.state = static_solid;
         data.color = darken_color(sfWhite, 0.8);
+        data.temperature = 20;
+        data.conductivity = 3.2;
         data.inertia = (sfVector2i){0, 0};
         data.life_time = INFINITY;
         data.life_counter = 0;
@@ -77,6 +84,8 @@ data_t create_data(int id)
         data.state = static_solid;
         data.density = 1000000;
         data.color = darken_color(sfRed, 0.3);
+        data.temperature = 20;
+        data.conductivity = 0;
         data.inertia = (sfVector2i){0, 0};
         data.life_time = INFINITY;
         data.life_counter = 0;
@@ -90,6 +99,8 @@ data_t create_data(int id)
         data.state = liquid;
         data.color = sfGreen;
         data.inertia = (sfVector2i){0, 0};
+        data.temperature = 20;
+        data.conductivity = 0.2;
         data.life_time = INFINITY;
         data.life_counter = 0;
         data.color = darken_color(data.color, random_number(95, 100) / 100.0);
@@ -102,6 +113,8 @@ data_t create_data(int id)
         data.state = static_solid;
         data.color = sfYellow;
         data.inertia = (sfVector2i){0, 0};
+        data.temperature = 20;
+        data.conductivity = 5;
         data.life_time = INFINITY;
         data.life_counter = 0;
         data.velocity = (sfVector2i){0, 0};
@@ -112,10 +125,41 @@ data_t create_data(int id)
         data.density = 0.6;
         data.state = gas;
         data.inertia = (sfVector2i){0, 0};
+        data.temperature = 20;
+        data.conductivity = 0.184;
         data.life_time = 10.0;
         data.life_counter = 0;
-        data.color = smooth_color(sfCyan, sfWhite, 0.6);
-        data.velocity = (sfVector2i){5, gravity};
+        data.color = smooth_color(sfWhite, sfCyan, 0.6);
+        data.color = darken_color(data.color, random_number(950, 1000) / 1000.0);
+        data.velocity = (sfVector2i){5, gravity / 2};
+    }
+    if (id == 8) {
+        data.has_updated = false;
+        data.id = lava;
+        data.density = 31.1;
+        data.state = liquid;
+        data.inertia = (sfVector2i){0, 0};
+        data.temperature = 3000;
+        data.conductivity = 5.2;
+        data.life_time = INFINITY;
+        data.life_counter = 0;
+        data.color = smooth_color(sfRed, sfYellow, 0.8);
+        data.color = darken_color(data.color, random_number(900, 1000) / 1000.0);
+        data.velocity = (sfVector2i){3, gravity};
+    }
+    if (id == 9) {
+        data.has_updated = false;
+        data.id = ice;
+        data.density = 0.917;
+        data.state = static_solid;
+        data.inertia = (sfVector2i){0, 0};
+        data.temperature = -50;
+        data.conductivity = 2.1;
+        data.life_time = INFINITY;
+        data.life_counter = 0;
+        data.color = darken_color(sfWhite, 0.9);
+        data.color = darken_color(data.color, random_number(950, 1000) / 1000.0);
+        data.velocity = (sfVector2i){0, 0};
     }
     return data;
 }
@@ -200,6 +244,10 @@ void select_voxel(core_t *c)
         c->brush.id = 6;
     if (key_pressed(sfKeyNum7))
         c->brush.id = 7;
+    if (key_pressed(sfKeyNum8))
+        c->brush.id = 8;
+    if (key_pressed(sfKeyNum9))
+        c->brush.id = 9;
 }
 
 void update_brush(core_t *c)

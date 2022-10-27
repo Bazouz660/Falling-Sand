@@ -45,7 +45,8 @@ void draw_background(core_t *c)
 void draw_ui(core_t *c)
 {
     //sfRenderWindow_setView(c->render.window, c->ui.view);
-    sfRenderWindow_drawText(c->render.window, c->render.fps_hint, NULL);
+    sfRenderWindow_drawText(c->render.window, c->ui.fps_hint, NULL);
+    sfRenderWindow_drawText(c->render.window, c->ui.voxel_info, NULL);
 }
 
 void draw_all(core_t *c)

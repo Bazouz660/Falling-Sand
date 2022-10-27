@@ -14,17 +14,22 @@ static void update_voxel(core_t *c, map_t *map, int x, int y)
     if (map->grid[x][y].data.id == 1)
         update_sand(map, x, y);
     if (map->grid[x][y].data.id == 2)
-        update_water(map, x, y, &map->grid[x][y].data);
+        update_water(map, x, y);
     if (map->grid[x][y].data.id == 3)
         update_stone(map, x, y);
     if (map->grid[x][y].data.id == 4)
         update_black_hole(map, x, y);
     if (map->grid[x][y].data.id == 5)
-        update_acid(map, x, y, &map->grid[x][y].data);
+        update_acid(map, x, y);
     if (map->grid[x][y].data.id == 6)
         update_clone(map, x, y);
     if (map->grid[x][y].data.id == 7)
         update_steam(c->clock, map, x, y);
+    if (map->grid[x][y].data.id == 8)
+        update_lava(c->clock, map, x, y);
+    if (map->grid[x][y].data.id == 9)
+        update_ice(map, x, y);
+    update_heat(map, x, y);
 }
 
 void update_grid(core_t *c)

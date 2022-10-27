@@ -34,7 +34,7 @@ void update_fps(core_t *c)
     fps = get_fps(c->clock.clock, &c->clock.prev_time);
     if (c->clock.seconds > clock + 0.2) {
         clock = c->clock.seconds;
-        sfText_setString(c->render.fps_hint, my_int_to_str((int)fps));
+        sfText_setString(c->ui.fps_hint, my_int_to_str((int)fps));
     }
 }
 
