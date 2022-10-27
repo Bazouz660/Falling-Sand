@@ -37,6 +37,7 @@
         steam,
         lava,
         ice,
+        NB_MATERIALS,
     } materials_e;
 
     typedef enum states_e {
@@ -53,6 +54,7 @@
         float density;
         float conductivity;
         float temperature;
+        float mass;
         bool has_updated;
         short state;
         sfVector2i velocity;

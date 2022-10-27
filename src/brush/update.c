@@ -23,143 +23,37 @@ data_t create_data(int id)
 {
     data_t data;
 
-    if (id == 0) {
-        data.has_updated = false;
-        data.id = empty;
-        data.density = 0;
-        data.color = sfBlack;
-        data.temperature = 20;
-        data.conductivity = 0.026;
-        data.state = -1;
-        data.inertia = (sfVector2i){0, 0};
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.velocity = (sfVector2i){1, gravity};
-    }
-    if (id == 1) {
-        data.has_updated = false;
-        data.id = sand;
-        data.density = 18.5;
-        data.color = sfYellow;
-        data.temperature = 20;
-        data.conductivity = 0.2;
-        data.state = movable_solid;
-        data.inertia = (sfVector2i){0, 0};
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(data.color, random_number(70, 100) / 100.0);
-        data.velocity = (sfVector2i){1, gravity};
-    }
-    if (id == 2) {
-        data.has_updated = false;
-        data.id = water;
-        data.density = 9.97;
-        data.color = smooth_color(sfBlue, sfCyan, 0.3);
-        data.temperature = 20;
-        data.conductivity = 0.59;
-        data.state = liquid;
-        data.inertia = (sfVector2i){0, 0};
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(data.color, random_number(90, 100) / 100.0);
-        data.velocity = (sfVector2i){10, gravity};
-    }
-    if (id == 3) {
-        data.has_updated = false;
-        data.id = stone;
-        data.density = 24.5;
-        data.state = static_solid;
-        data.color = darken_color(sfWhite, 0.8);
-        data.temperature = 20;
-        data.conductivity = 3.2;
-        data.inertia = (sfVector2i){0, 0};
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(data.color, random_number(80, 100) / 100.0);
-        data.velocity = (sfVector2i){0, 0};
-    }
-    if (id == 4) {
-        data.has_updated = false;
-        data.id = black_hole;
-        data.state = static_solid;
-        data.density = 1000000;
-        data.color = darken_color(sfRed, 0.3);
-        data.temperature = 20;
-        data.conductivity = 0;
-        data.inertia = (sfVector2i){0, 0};
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(data.color, random_number(80, 100) / 100.0);
-        data.velocity = (sfVector2i){0, 0};
-    }
-    if (id == 5) {
-        data.has_updated = false;
-        data.id = acid;
-        data.density = 1.05;
-        data.state = liquid;
-        data.color = sfGreen;
-        data.inertia = (sfVector2i){0, 0};
-        data.temperature = 20;
-        data.conductivity = 0.2;
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(data.color, random_number(95, 100) / 100.0);
-        data.velocity = (sfVector2i){8, gravity};
-    }
-    if (id == 6) {
-        data.has_updated = false;
-        data.id = clone;
-        data.density = 300.0;
-        data.state = static_solid;
-        data.color = sfYellow;
-        data.inertia = (sfVector2i){0, 0};
-        data.temperature = 20;
-        data.conductivity = 5;
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.velocity = (sfVector2i){0, 0};
-    }
-    if (id == 7) {
-        data.has_updated = false;
-        data.id = steam;
-        data.density = 0.6;
-        data.state = gas;
-        data.inertia = (sfVector2i){0, 0};
-        data.temperature = 20;
-        data.conductivity = 0.184;
-        data.life_time = 10.0;
-        data.life_counter = 0;
-        data.color = smooth_color(sfWhite, sfCyan, 0.6);
-        data.color = darken_color(data.color, random_number(950, 1000) / 1000.0);
-        data.velocity = (sfVector2i){5, gravity / 2};
-    }
-    if (id == 8) {
-        data.has_updated = false;
-        data.id = lava;
-        data.density = 31.1;
-        data.state = liquid;
-        data.inertia = (sfVector2i){0, 0};
-        data.temperature = 3000;
-        data.conductivity = 5.2;
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = smooth_color(sfRed, sfYellow, 0.8);
-        data.color = darken_color(data.color, random_number(900, 1000) / 1000.0);
-        data.velocity = (sfVector2i){3, gravity};
-    }
-    if (id == 9) {
-        data.has_updated = false;
-        data.id = ice;
-        data.density = 0.917;
-        data.state = static_solid;
-        data.inertia = (sfVector2i){0, 0};
-        data.temperature = -50;
-        data.conductivity = 2.1;
-        data.life_time = INFINITY;
-        data.life_counter = 0;
-        data.color = darken_color(sfWhite, 0.9);
-        data.color = darken_color(data.color, random_number(950, 1000) / 1000.0);
-        data.velocity = (sfVector2i){0, 0};
+    switch (id) {
+        case empty:
+            data = create_empty();
+            break;
+        case sand:
+            data = create_sand();
+            break;
+        case water:
+            data = create_water();
+            break;
+        case stone:
+            data = create_stone();
+            break;
+        case lava:
+            data = create_lava();
+            break;
+        case ice:
+            data = create_ice();
+            break;
+        case steam:
+            data = create_steam();
+            break;
+        case acid:
+            data = create_acid();
+            break;
+        case black_hole:
+            data = create_black_hole();
+            break;
+        case clone:
+            data = create_clone();
+            break;
     }
     return data;
 }
@@ -181,16 +75,6 @@ void place_in_range(core_t *c, sfVector2i center, int radius, int id)
     if (c->map.grid[center.x][center.y].data.id == 0 || id == 0)
         c->map.grid[center.x][center.y].data = data;
 
-    //for (int i = -(radius / 2); i < (radius / 2); i++) {
-    //    for (int j = -(radius / 2); j < (radius / 2); j++) {
-    //        if (is_in_grid(&c->map, (sfVector2i){center.x, center.y + j}) && )
-    //            if (c->map.grid[center.x][center.y + j].data.id == 0 || id == 0)
-    //                c->map.grid[center.x][center.y + j].data = create_data(id);
-    //        if (is_in_grid(&c->map, (sfVector2i){center.x + i, center.y}))
-    //            if (c->map.grid[center.x + i][center.y].data.id == 0 || id == 0)
-    //                c->map.grid[center.x + i][center.y].data = create_data(id);
-    //    }
-    //}
     for (int y = -radius - 1; y <= radius; y++) {
         for (int x = -radius - 1; x <= radius; x++) {
             if (inside_circle(center, (sfVector2i){center.x + x, center.y + y}, radius)) {

@@ -148,6 +148,16 @@
     data_t create_data(int id);
 
     // Materials
+    data_t create_empty(void);
+    data_t create_sand(void);
+    data_t create_water(void);
+    data_t create_stone(void);
+    data_t create_black_hole(void);
+    data_t create_clone(void);
+    data_t create_steam(void);
+    data_t create_ice(void);
+    data_t create_acid(void);
+    data_t create_lava(void);
     void update_sand(map_t *map, int x, int y);
     void update_water(map_t *map, int x, int y);
     void update_black_hole(map_t *map, int x, int y);
