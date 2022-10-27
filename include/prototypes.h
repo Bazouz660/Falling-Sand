@@ -116,6 +116,7 @@
     void button_set_onclick(button_t *button, void(*func)(core_t *, button_t *));
     void button_link_scene(button_t *button, unsigned short scene);
     void button_destroy(button_t *button);
+    void update_buttons(core_t *c);
 
     // UI
     void draw_main_menu(core_t *c);

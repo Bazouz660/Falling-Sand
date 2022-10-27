@@ -60,6 +60,7 @@ button_t *button_create(sfTexture *texture, sfVector2f size, sfVector2f pos)
     sfRectangleShape_setTexture(button->shape, button->texture, false);
     sfRectangleShape_setTextureRect(button->shape, rect);
     button_set_update(button);
+    index++;
     return button;
 }
 

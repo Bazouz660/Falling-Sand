@@ -35,10 +35,21 @@ void init_view(core_t *c)
 
 void init_textures(core_t *c)
 {
-    c->textures.button = malloc(sizeof(sfTexture *) * 3);
+    c->textures.button = malloc(sizeof(sfTexture *) * (3 + NB_MATERIALS));
     c->textures.button[0] = new_texture("assets/buttons/play.png", NULL);
     c->textures.button[1] = new_texture("assets/buttons/exit.png", NULL);
-    c->textures.button[2] = NULL;
+    c->textures.button[2] = new_texture("assets/buttons/sand.png", NULL);
+    c->textures.button[3] = new_texture("assets/buttons/water.png", NULL);
+    c->textures.button[4] = new_texture("assets/buttons/stone.png", NULL);
+    c->textures.button[5] = new_texture("assets/buttons/black_hole.png", NULL);
+    c->textures.button[6] = new_texture("assets/buttons/acid.png", NULL);
+    c->textures.button[7] = new_texture("assets/buttons/clone.png", NULL);
+    c->textures.button[8] = new_texture("assets/buttons/steam.png", NULL);
+    c->textures.button[9] = new_texture("assets/buttons/lava.png", NULL);
+    c->textures.button[10] = new_texture("assets/buttons/ice.png", NULL);
+    c->textures.button[11] = new_texture("assets/buttons/caustic_gas.png", NULL);
+    c->textures.button[12] = NULL;
+
 }
 
 void init_mouse(core_t *c)
@@ -47,29 +58,62 @@ void init_mouse(core_t *c)
     c->ui.mouse_released = true;
 }
 
+void init_material_buttons(core_t *c)
+{
+    c->ui.button[2] = button_create(c->textures.button[2],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.10});
+    c->ui.button[3] = button_create(c->textures.button[3],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.15});
+    c->ui.button[4] = button_create(c->textures.button[4],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.20});
+    c->ui.button[5] = button_create(c->textures.button[5],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.25});
+    c->ui.button[6] = button_create(c->textures.button[6],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.30});
+    c->ui.button[7] = button_create(c->textures.button[7],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.35});
+    c->ui.button[8] = button_create(c->textures.button[8],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.40});
+    c->ui.button[9] = button_create(c->textures.button[9],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.45});
+    c->ui.button[10] = button_create(c->textures.button[10],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.50});
+    c->ui.button[11] = button_create(c->textures.button[11],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.55});
+
+
+    for (int i = 2; i < NB_MATERIALS + 1; i++) {
+        button_link_scene(c->ui.button[i], 1);
+        button_set_onclick(c->ui.button[i], &on_click_set_brush_id);
+    }
+    c->ui.button[12] = NULL;
+}
+
 void init_buttons(core_t *c)
 {
-    c->ui.button = malloc(sizeof(button_t *) * 3);
+    c->ui.button = malloc(sizeof(button_t *) * (3 + NB_MATERIALS));
     c->ui.button[0] = button_create(c->textures.button[0],
-    (sfVector2f){200, 150}, (sfVector2f){960, 400});
+    (sfVector2f){350, 150}, (sfVector2f){c->render.w_size.x / 2.0, c->render.w_size.y * 0.4});
     c->ui.button[1] = button_create(c->textures.button[1],
-    (sfVector2f){200, 150}, (sfVector2f){960, 600});
-    c->ui.button[2] = NULL;
+    (sfVector2f){350, 150}, (sfVector2f){c->render.w_size.x / 2.0, c->render.w_size.y * 0.6});
 
     button_link_scene(c->ui.button[0], 0);
     button_link_scene(c->ui.button[1], 0);
     button_set_onclick(c->ui.button[0], &on_click_play);
     button_set_onclick(c->ui.button[1], &on_click_exit);
+
+    init_material_buttons(c);
 }
 
 void init_background(core_t *c)
 {
-    c->ui.b1 = sfRectangleShape_create();
+    c->ui.background = sfRectangleShape_create();
 
-    sfRectangleShape_setSize(c->ui.b1, (sfVector2f){c->render.r_size.x,
-    c->render.r_size.y});
-    sfRectangleShape_setOrigin(c->ui.b1, get_rect_center(c->ui.b1));
-    sfRectangleShape_setFillColor(c->ui.b1, sfBlack);
+    sfRectangleShape_setSize(c->ui.background, (sfVector2f){c->render.w_size.x,
+    c->render.w_size.y});
+    sfRectangleShape_setOrigin(c->ui.background, get_rect_center(c->ui.background));
+    sfRectangleShape_setFillColor(c->ui.background, darken_color(sfWhite, 0.2));
+    sfRectangleShape_setPosition(c->ui.background, sfView_getCenter(c->ui.view));
 }
 
 void init_ui_view(core_t *c)
@@ -83,7 +127,7 @@ void init_voxel_info(core_t *c)
 
     sfText_setCharacterSize(c->ui.voxel_info, 20);
     sfText_setString(c->ui.voxel_info, "Empty");
-    sfText_setPosition(c->ui.voxel_info, (sfVector2f){c->render.w_size.x * 0.95,
+    sfText_setPosition(c->ui.voxel_info, (sfVector2f){c->render.w_size.x * 0.92,
     c->render.w_size.y / 25.0});
     sfText_setOrigin(c->ui.voxel_info, get_text_center(c->ui.voxel_info));
 }
@@ -91,9 +135,9 @@ void init_voxel_info(core_t *c)
 void init_ui(core_t *c)
 {
     init_fps_text(c);
+    init_ui_view(c);
     init_background(c);
     init_buttons(c);
-    init_ui_view(c);
     init_voxel_info(c);
 }
 
@@ -141,11 +185,11 @@ void init_render_texture(core_t *c)
     false);
     c->textures.r_texture = (sfTexture *)sfRenderTexture_getTexture(c->render.r_texture);
     c->render.r_shape = sfRectangleShape_create();
-    sfRectangleShape_setSize(c->render.r_shape, v2u_to_v2f(c->render.w_size));
-    sfRectangleShape_setOutlineColor(c->render.r_shape, sfWhite);
+    sfRectangleShape_setSize(c->render.r_shape, (sfVector2f){c->render.w_size.x * 0.9, c->render.w_size.y});
+    sfRectangleShape_setOutlineColor(c->render.r_shape, darken_color(sfWhite, 0.5));
     sfRectangleShape_setOutlineThickness(c->render.r_shape, 0);
-    sfRectangleShape_setOrigin(c->render.r_shape, get_rect_center(c->render.r_shape));
-    sfRectangleShape_setPosition(c->render.r_shape, sfView_getCenter(c->render.view));
+    sfRectangleShape_setOrigin(c->render.r_shape, (sfVector2f){0, get_rect_center(c->render.r_shape).y});
+    sfRectangleShape_setPosition(c->render.r_shape, (sfVector2f){0, sfView_getCenter(c->render.view).y});
     sfRectangleShape_setTexture(c->render.r_shape, c->textures.r_texture, false);
     sfRectangleShape_setScale(c->render.r_shape, (sfVector2f){1, -1});
 }

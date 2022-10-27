@@ -18,3 +18,8 @@ void on_click_exit(core_t *c, button_t *button)
 {
     close_game(c);
 }
+
+void on_click_set_brush_id(core_t *c, button_t *button)
+{
+    c->brush.id = button->index - 1;
+}

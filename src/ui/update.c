@@ -15,7 +15,7 @@ void update_cursor_info(core_t *c)
 
     if (is_in_grid(&c->map, (sfVector2i){m_pos.x, m_pos.y})) {
         temperature = c->map.grid[m_pos.x][m_pos.y].data.temperature;
-        sfText_setString(c->ui.voxel_info, (my_int_to_str((int)temperature)));
+        sfText_setString(c->ui.voxel_info, my_strcat("Temperature: ", (my_int_to_str((int)temperature))));
     }
 }
 

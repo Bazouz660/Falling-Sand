@@ -16,7 +16,7 @@ static void free_buttons(core_t *c)
 
 void free_ui(core_t *c)
 {
-    sfRectangleShape_destroy(c->ui.b1);
+    sfRectangleShape_destroy(c->ui.background);
     sfFont_destroy(c->ui.font);
 
     sfView_destroy(c->ui.view);

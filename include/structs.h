@@ -171,7 +171,7 @@
         button_t **button;
         bool mouse_released;
         unsigned short selected_level;
-        sfRectangleShape *b1;
+        sfRectangleShape *background;
     } ui_t;
 
     typedef enum {

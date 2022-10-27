@@ -30,29 +30,17 @@ void draw_brush(core_t *c)
     sfRenderWindow_drawCircleShape(c->render.window, c->brush.shape, NULL);
 }
 
+void draw_background(core_t *c)
+{
+    sfRenderWindow_drawRectangleShape(c->render.window, c->ui.background, NULL);
+}
+
 void draw_2d(core_t *c)
 {
     //sfRenderWindow_setView(c->render.window, c->render.view);
+    draw_background(c);
     draw_grid(c);
     draw_brush(c);
-}
-
-void draw_background(core_t *c)
-{
-    sfRenderWindow_drawRectangleShape(c->render.window, c->ui.b1, NULL);
-}
-
-void draw_ui(core_t *c)
-{
-    //sfRenderWindow_setView(c->render.window, c->ui.view);
-    sfRenderWindow_drawText(c->render.window, c->ui.fps_hint, NULL);
-    sfRenderWindow_drawText(c->render.window, c->ui.voxel_info, NULL);
-}
-
-void draw_all(core_t *c)
-{
-    draw_2d(c);
-    draw_ui(c);
 }
 
 void draw_buttons(core_t *c)
@@ -62,6 +50,20 @@ void draw_buttons(core_t *c)
             sfRenderWindow_drawRectangleShape(c->render.window,
             c->ui.button[i]->shape, NULL);
     }
+}
+
+void draw_ui(core_t *c)
+{
+    //sfRenderWindow_setView(c->render.window, c->ui.view);
+    sfRenderWindow_drawText(c->render.window, c->ui.fps_hint, NULL);
+    sfRenderWindow_drawText(c->render.window, c->ui.voxel_info, NULL);
+    draw_buttons(c);
+}
+
+void draw_all(core_t *c)
+{
+    draw_2d(c);
+    draw_ui(c);
 }
 
 void draw_main_menu(core_t *c)

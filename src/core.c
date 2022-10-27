@@ -48,18 +48,11 @@ void update_mouse(core_t *c)
 
 void render_game(core_t *c)
 {
+    update_buttons(c);
     update_ui(c);
     update_brush(c);
     update_grid(c);
     draw_all(c);
-}
-
-void update_buttons(core_t *c)
-{
-    for (int i = 0; c->ui.button[i] != NULL; i++) {
-        if (c->ui.button[i]->scene == c->render.scene)
-            c->ui.button[i]->update(c, c->ui.button[i]);
-    }
 }
 
 void render_menu(core_t *c)

@@ -10,7 +10,7 @@
 sfVector2i get_mouse_grid(core_t *c)
 {
     sfVector2i m_pos = c->mouse.pos;
-    sfVector2u w_size = c->render.w_size;
+    sfVector2u w_size = {c->render.w_size.x * 0.9, c->render.w_size.y};
     sfVector2f ratio = {(float)w_size.x / (float)c->map.dim.x,
     (float)w_size.y / (float)c->map.dim.y};
     sfVector2f m_pos_view = {m_pos.x / ratio.x, m_pos.y / ratio.y};
@@ -30,7 +30,7 @@ bool is_in_grid(map_t *map, sfVector2i pos)
 {
     sfVector2i dim = map->dim;
 
-    if (pos.x < dim.x - 1 && pos.x >= 0 && pos.y < dim.y - 1 && pos.y >= 0)
+    if (pos.x < dim.x && pos.x >= 0 && pos.y < dim.y - 1 && pos.y >= 0)
         return true;
     return false;
 }
