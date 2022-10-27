@@ -115,30 +115,6 @@ void place_voxel(core_t *c)
     }
 }
 
-void select_voxel(core_t *c)
-{
-    if (key_pressed(sfKeyNum1))
-        c->brush.id = 1;
-    if (key_pressed(sfKeyNum2))
-        c->brush.id = 2;
-    if (key_pressed(sfKeyNum3))
-        c->brush.id = 3;
-    if (key_pressed(sfKeyNum4))
-        c->brush.id = 4;
-    if (key_pressed(sfKeyNum5))
-        c->brush.id = 5;
-    if (key_pressed(sfKeyNum6))
-        c->brush.id = 6;
-    if (key_pressed(sfKeyNum7))
-        c->brush.id = 7;
-    if (key_pressed(sfKeyNum8))
-        c->brush.id = 8;
-    if (key_pressed(sfKeyNum9))
-        c->brush.id = 9;
-    if (key_pressed(sfKeyNum0))
-        c->brush.id = 10;
-}
-
 void update_brush(core_t *c)
 {
     sfVector2i m_pos = get_mouse_pos_view(c);
@@ -146,7 +122,6 @@ void update_brush(core_t *c)
     sfVector2f ratio = {(float)w_size.x / (float)c->map.dim.x,
     (float)w_size.y / (float)c->map.dim.y};
 
-    select_voxel(c);
     place_voxel(c);
     sfCircleShape_setRadius(c->brush.shape, c->brush.radius);
     sfCircleShape_setOrigin(c->brush.shape, get_circle_center(c->brush.shape));
