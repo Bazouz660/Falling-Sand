@@ -39,29 +39,15 @@ void update_grid(core_t *c)
     int index = 0;
     static int frame_counter = 0;
     bool ran = (frame_counter % 2 == 0 ? 0: 1);
-    bool ran2 = 1;
 
     if (!c->events.paused) {
-
-        if (ran2) {
-            for (int y = 0; y < c->map.dim.y; y++) {
-                if (ran) {
-                    for (int x = c->map.dim.x - 1; x >= 0 ; x--)
-                        update_voxel(c, &c->map, x, y);
-                } else {
-                    for (int x = 0; x < c->map.dim.x; x++)
-                        update_voxel(c, &c->map, x, y);
-                }
-            }
-        } else {
-            for (int y = c->map.dim.y - 1; y >= 0; y--) {
-                if (ran) {
-                    for (int x = c->map.dim.x - 1; x >= 0 ; x--)
-                        update_voxel(c, &c->map, x, y);
-                } else {
-                    for (int x = 0; x < c->map.dim.x; x++)
-                        update_voxel(c, &c->map, x, y);
-                }
+        for (int y = 0; y < c->map.dim.y; y++) {
+            if (ran) {
+                for (int x = c->map.dim.x - 1; x >= 0 ; x--)
+                    update_voxel(c, &c->map, x, y);
+            } else {
+                for (int x = 0; x < c->map.dim.x; x++)
+                    update_voxel(c, &c->map, x, y);
             }
         }
     }

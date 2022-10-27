@@ -122,6 +122,8 @@ void update_brush(core_t *c)
     sfVector2f ratio = {(float)w_size.x / (float)c->map.dim.x,
     (float)w_size.y / (float)c->map.dim.y};
 
+    if (!sfRenderWindow_hasFocus(c->render.window))
+        return;
     place_voxel(c);
     sfCircleShape_setRadius(c->brush.shape, c->brush.radius);
     sfCircleShape_setOrigin(c->brush.shape, get_circle_center(c->brush.shape));

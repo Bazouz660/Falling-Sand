@@ -66,7 +66,7 @@ int game_loop(void)
     core_t *c = malloc(sizeof(core_t));
 
     init_game(c);
-    sfRenderWindow_setVerticalSyncEnabled(c->render.window, True);
+    //sfRenderWindow_setVerticalSyncEnabled(c->render.window, True);
     //sfRenderWindow_setFramerateLimit(c->render.window, 30);
     while (sfRenderWindow_isOpen(c->render.window)) {
         update_clock(c);
