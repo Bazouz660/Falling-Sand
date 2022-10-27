@@ -37,6 +37,7 @@
         steam,
         lava,
         ice,
+        caustic_gas,
         NB_MATERIALS,
     } materials_e;
 

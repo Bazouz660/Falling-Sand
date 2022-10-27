@@ -15,6 +15,7 @@ data_t create_water(void)
     data.id = water;
     data.density = 9.97;
     data.color = smooth_color(sfBlue, sfCyan, 0.3);
+    data.color.a = 150;
     data.temperature = 20;
     data.conductivity = 0.59;
     data.state = liquid;

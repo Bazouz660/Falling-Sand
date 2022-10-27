@@ -7,21 +7,9 @@
 
 #include "prototypes.h"
 
-bool solidfy(map_t *map, int x, int y)
-{
-    data_t tmp = map->grid[x][y].data;
-
-    if (map->grid[x][y].data.temperature <= 1000) {
-        map->grid[x][y].data = create_data(stone);
-        map->grid[x][y].data.temperature = tmp.temperature;
-        return true;
-    }
-    return false;
-}
-
 void update_lava(clock_st clock, map_t *map, int x, int y)
 {
-    if (solidfy(map, x, y))
+    if (solidify(map, x, y, 1000, stone))
         return;
     move_liquid(map, x, y);
 }

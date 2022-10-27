@@ -9,26 +9,28 @@
 
 static void update_voxel(core_t *c, map_t *map, int x, int y)
 {
-    if (map->grid[x][y].data.id == 0 || map->grid[x][y].data.has_updated == true)
+    if (map->grid[x][y].data.id == empty || map->grid[x][y].data.has_updated == true)
         return;
-    if (map->grid[x][y].data.id == 1)
+    if (map->grid[x][y].data.id == sand)
         update_sand(map, x, y);
-    if (map->grid[x][y].data.id == 2)
+    if (map->grid[x][y].data.id == water)
         update_water(map, x, y);
-    if (map->grid[x][y].data.id == 3)
+    if (map->grid[x][y].data.id == stone)
         update_stone(map, x, y);
-    if (map->grid[x][y].data.id == 4)
+    if (map->grid[x][y].data.id == black_hole)
         update_black_hole(map, x, y);
-    if (map->grid[x][y].data.id == 5)
+    if (map->grid[x][y].data.id == acid)
         update_acid(map, x, y);
-    if (map->grid[x][y].data.id == 6)
+    if (map->grid[x][y].data.id == clone)
         update_clone(map, x, y);
-    if (map->grid[x][y].data.id == 7)
+    if (map->grid[x][y].data.id == steam)
         update_steam(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == 8)
+    if (map->grid[x][y].data.id == lava)
         update_lava(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == 9)
+    if (map->grid[x][y].data.id == ice)
         update_ice(map, x, y);
+    if (map->grid[x][y].data.id == caustic_gas)
+        update_caustic_gas(c->clock, map, x, y);
     update_heat(map, x, y);
 }
 

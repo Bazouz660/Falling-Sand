@@ -158,6 +158,7 @@
     data_t create_ice(void);
     data_t create_acid(void);
     data_t create_lava(void);
+    data_t create_caustic_gas(void);
     void update_sand(map_t *map, int x, int y);
     void update_water(map_t *map, int x, int y);
     void update_black_hole(map_t *map, int x, int y);
@@ -167,8 +168,14 @@
     void update_steam(clock_st clock, map_t *map, int x, int y);
     void update_lava(clock_st clock, map_t *map, int x, int y);
     void update_ice(map_t *map, int x, int y);
+    void update_caustic_gas(clock_st clock, map_t *map, int x, int y);
 
     // States
+    bool sublimate(map_t *map, int x, int y, float threshold, int id);
+    bool melt(map_t *map, int x, int y, float threshold, int id);
+    bool solidify(map_t *map, int x, int y, float threshold, int id);
+    bool vaporize(map_t *map, int x, int y, float threshold, int id);
+    bool condensate(map_t *map, int x, int y, float threshold, int id);
     void move_gas(map_t *map, int x, int y);
     void move_liquid(map_t *map, int x, int y);
     void move_movable_solid(map_t *map, int x, int y);

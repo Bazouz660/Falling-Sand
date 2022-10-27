@@ -54,6 +54,9 @@ data_t create_data(int id)
         case clone:
             data = create_clone();
             break;
+        case caustic_gas:
+            data = create_caustic_gas();
+            break;
     }
     return data;
 }
@@ -132,11 +135,16 @@ void select_voxel(core_t *c)
         c->brush.id = 8;
     if (key_pressed(sfKeyNum9))
         c->brush.id = 9;
+    if (key_pressed(sfKeyNum0))
+        c->brush.id = 10;
 }
 
 void update_brush(core_t *c)
 {
     sfVector2i m_pos = get_mouse_pos_view(c);
+    sfVector2u w_size = c->render.w_size;
+    sfVector2f ratio = {(float)w_size.x / (float)c->map.dim.x,
+    (float)w_size.y / (float)c->map.dim.y};
 
     select_voxel(c);
     place_voxel(c);
