@@ -17,6 +17,7 @@ data_t create_caustic_gas(void)
     data.state = gas;
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 80;
+    data.flammability = 0.2;
     data.conductivity = 0.35;
     data.life_time = 20.0;
     data.life_counter = 0;

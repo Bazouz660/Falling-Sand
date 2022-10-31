@@ -17,6 +17,7 @@ data_t create_steam(void)
     data.state = gas;
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 120;
+    data.flammability = 0;
     data.conductivity = 0.184;
     data.life_time = 10.0;
     data.life_counter = 0;

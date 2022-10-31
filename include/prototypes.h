@@ -160,6 +160,9 @@
     data_t create_acid(void);
     data_t create_lava(void);
     data_t create_caustic_gas(void);
+    data_t create_wood(void);
+    data_t create_fire(void);
+    data_t create_smoke(void);
     void update_sand(map_t *map, int x, int y);
     void update_water(map_t *map, int x, int y);
     void update_black_hole(map_t *map, int x, int y);
@@ -170,8 +173,13 @@
     void update_lava(clock_st clock, map_t *map, int x, int y);
     void update_ice(map_t *map, int x, int y);
     void update_caustic_gas(clock_st clock, map_t *map, int x, int y);
+    void update_wood(map_t *map, int x, int y);
+    void update_fire(clock_st clock, map_t *map, int x, int y);
+    void update_smoke(clock_st clock, map_t *map, int x, int y);
 
     // States
+bool produce_fire(map_t *map, int x, int y, data_t *data);
+    bool burn(data_t *data, float threshold);
     bool sublimate(map_t *map, int x, int y, float threshold, int id);
     bool melt(map_t *map, int x, int y, float threshold, int id);
     bool solidify(map_t *map, int x, int y, float threshold, int id);

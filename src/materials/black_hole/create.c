@@ -17,6 +17,7 @@ data_t create_black_hole(void)
     data.density = 1000000;
     data.color = darken_color(sfRed, 0.3);
     data.temperature = 20;
+    data.flammability = 0;
     data.conductivity = 0;
     data.inertia = (sfVector2i){0, 0};
     data.life_time = INFINITY;

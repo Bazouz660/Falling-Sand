@@ -31,6 +31,12 @@ static void update_voxel(core_t *c, map_t *map, int x, int y)
         update_ice(map, x, y);
     if (map->grid[x][y].data.id == caustic_gas)
         update_caustic_gas(c->clock, map, x, y);
+    if (map->grid[x][y].data.id == wood)
+        update_wood(map, x, y);
+    if (map->grid[x][y].data.id == fire)
+        update_fire(c->clock, map, x, y);
+    if (map->grid[x][y].data.id == smoke)
+        update_smoke(c->clock, map, x, y);
     update_heat(map, x, y);
 }
 

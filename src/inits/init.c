@@ -48,7 +48,10 @@ void init_textures(core_t *c)
     c->textures.button[9] = new_texture("assets/buttons/lava.png", NULL);
     c->textures.button[10] = new_texture("assets/buttons/ice.png", NULL);
     c->textures.button[11] = new_texture("assets/buttons/caustic_gas.png", NULL);
-    c->textures.button[12] = NULL;
+    c->textures.button[12] = new_texture("assets/buttons/wood.png", NULL);
+    c->textures.button[13] = new_texture("assets/buttons/fire.png", NULL);
+    c->textures.button[14] = new_texture("assets/buttons/smoke.png", NULL);
+    c->textures.button[15] = NULL;
 
 }
 
@@ -80,13 +83,19 @@ void init_material_buttons(core_t *c)
     (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.50});
     c->ui.button[11] = button_create(c->textures.button[11],
     (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.55});
+    c->ui.button[12] = button_create(c->textures.button[12],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.60});
+    c->ui.button[13] = button_create(c->textures.button[13],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.65});
+    c->ui.button[14] = button_create(c->textures.button[14],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.70});
 
 
     for (int i = 2; i < NB_MATERIALS + 1; i++) {
         button_link_scene(c->ui.button[i], 1);
         button_set_onclick(c->ui.button[i], &on_click_set_brush_id);
     }
-    c->ui.button[12] = NULL;
+    c->ui.button[15] = NULL;
 }
 
 void init_buttons(core_t *c)

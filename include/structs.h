@@ -38,6 +38,9 @@
         lava,
         ice,
         caustic_gas,
+        wood,
+        fire,
+        smoke,
         NB_MATERIALS,
     } materials_e;
 
@@ -55,6 +58,7 @@
         float density;
         float conductivity;
         float temperature;
+        float flammability;
         float mass;
         bool has_updated;
         short state;

@@ -46,7 +46,7 @@ void swap_voxel(data_t *a, data_t *b)
 
 void copy_voxel(data_t *dest, data_t *src)
 {
-    *dest = *src;
+    *dest = create_data(src->id);
     dest->has_updated = true;
 }
 
@@ -86,15 +86,15 @@ void transfer_heat(data_t *a, data_t *b)
 
 
     if (temp1 > temp2) {
-        transfered_heat = (temp1 - temp2) * get_min(a->conductivity / 10.0, b->conductivity / 10.0);
-        b->temperature += transfered_heat;
-        a->temperature -= transfered_heat;
+        transfered_heat = (temp1 - temp2);
+        b->temperature += transfered_heat * (a->conductivity / 10.0);
+        a->temperature -= transfered_heat * (b->conductivity / 10.0);
         b->temperature > 10000 ? b->temperature = 10000 : 0;
         a->temperature < -253 ? a->temperature = -253 : 0;
     } else if (temp1 < temp2) {
-        transfered_heat = (temp2 - temp1) * get_min(a->conductivity / 10.0, b->conductivity / 10.0);
-        a->temperature += transfered_heat;
-        b->temperature -= transfered_heat;
+        transfered_heat = (temp2 - temp1);
+        a->temperature += transfered_heat * (b->conductivity / 10.0);
+        b->temperature -= transfered_heat * (a->conductivity / 10.0);
         a->temperature > 10000 ? a->temperature = 10000 : 0;
         b->temperature < -253 ? b->temperature = -253 : 0;
     }

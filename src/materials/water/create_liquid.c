@@ -17,6 +17,7 @@ data_t create_water(void)
     data.color = smooth_color(sfBlue, sfCyan, 0.3);
     data.color.a = 150;
     data.temperature = 20;
+    data.flammability = 0;
     data.conductivity = 0.59;
     data.state = liquid;
     data.inertia = (sfVector2i){0, 0};

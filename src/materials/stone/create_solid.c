@@ -17,6 +17,7 @@ data_t create_stone(void)
     data.state = static_solid;
     data.color = darken_color(sfWhite, 0.8);
     data.temperature = 20;
+    data.flammability = 0;
     data.conductivity = 3.2;
     data.inertia = (sfVector2i){0, 0};
     data.life_time = INFINITY;

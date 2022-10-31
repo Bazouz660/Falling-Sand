@@ -57,6 +57,15 @@ data_t create_data(int id)
         case caustic_gas:
             data = create_caustic_gas();
             break;
+        case wood:
+            data = create_wood();
+            break;
+        case fire:
+            data = create_fire();
+            break;
+        case smoke:
+            data = create_smoke();
+            break;
     }
     return data;
 }

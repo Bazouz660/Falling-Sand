@@ -34,7 +34,7 @@ static bool move_up(map_t *map, int x, int y)
 
     for (int i = 1; i < data.velocity.y - 1; i++) {
         if (is_in_grid(map, (sfVector2i){x, y - i})) {
-            if (map->grid[x][y - i + 1].data.density > map->grid[x][y - i].data.density) {
+            if (map->grid[x][y - i + 1].data.density > map->grid[x][y - i].data.density && map->grid[x][y - i].data.state != static_solid) {
                 swap_voxel(&map->grid[x][y - i].data, &map->grid[x][y - i + 1].data);
                 map->grid[x][y - i].data.inertia.y = -1;
                 moved++;
@@ -65,7 +65,7 @@ static bool move_right(map_t *map, int x, int y)
         y -= moved;
         moved = 0;
         if (is_in_grid(map, (sfVector2i){x + i.x, y - i.y - 1})) {
-            if (map->grid[x + i.x - 1][y].data.density > map->grid[x + i.x][y].data.density) {
+            if (map->grid[x + i.x - 1][y].data.density > map->grid[x + i.x][y].data.density && map->grid[x + i.x][y].data.state != static_solid) {
                 swap_voxel(&map->grid[x + i.x][y].data, &map->grid[x + i.x - 1][y].data);
                 map->grid[x + i.x][y].data.inertia.x = 1;
                 i.x ++;
@@ -97,7 +97,7 @@ static bool move_left(map_t *map, int x, int y)
         y -= moved;
         moved = 0;
         if (is_in_grid(map, (sfVector2i){x - i.x, y - i.y - 1})) {
-            if (map->grid[x - i.x + 1][y].data.density > map->grid[x - i.x][y].data.density) {
+            if (map->grid[x - i.x + 1][y].data.density > map->grid[x - i.x][y].data.density && map->grid[x - i.x][y].data.state != static_solid) {
                 swap_voxel(&map->grid[x - i.x][y].data, &map->grid[x - i.x + 1][y].data);
                 map->grid[x - i.x][y].data.inertia.x = -1;
                 i.x++;
