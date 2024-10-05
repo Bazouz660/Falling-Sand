@@ -152,11 +152,13 @@ void init_ui(core_t *c)
 
 void init_keys(core_t *c)
 {
-    c->events.keys.toggleable = malloc(sizeof(switch_key_t) * (3));
-    init_toggleable_key(&c->events.keys.toggleable[0], sfKeyF11,
-    &toggle_fullscreen);
+    unsigned int toggleable_keys_count = 2;
+    c->events.keys.toggleable = malloc(sizeof(switch_key_t) * (toggleable_keys_count + 1));
+    c->events.keys.toggleable[toggleable_keys_count + 1].index = -1;
+
+    init_toggleable_key(&c->events.keys.toggleable[0], sfKeyF11, &toggle_fullscreen);
     init_toggleable_key(&c->events.keys.toggleable[1], sfKeySpace, &toggle_pause);
-    c->events.keys.toggleable[2].index = -1;
+    init_toggleable_key(&c->events.keys.toggleable[2], sfKeyT, &toggle_temperature_mode);
 }
 
 void init_map(core_t *c)
@@ -221,6 +223,7 @@ void init_game(core_t *c)
     c->render.w_size = sfRenderWindow_getSize(c->render.window);
     sfRenderWindow_setPosition(c->render.window, (sfVector2i){0, 0});
     c->render.fullscreen = false;
+    c->render.temperature_mode = false;
     c->clock.clock = sfClock_create();
     c->mouse.lastpos = get_mouse_pos_view(c);
     c->mouse.diff = (sfVector2i){0, 0};

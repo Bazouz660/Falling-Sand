@@ -29,5 +29,8 @@
     #define new_texture(path, intrect) sfTexture_createFromFile(path, intrect)
     #define key_pressed(key) sfKeyboard_isKeyPressed(key)
 
+    #define MIN_TEMPERATURE -273.15
+    #define MAX_TEMPERATURE 5000
+
 #endif /*SAND_DEFINES*/
 

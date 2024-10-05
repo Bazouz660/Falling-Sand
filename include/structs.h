@@ -123,6 +123,7 @@
         sfView *view;
         bool fullscreen;
         unsigned short scene;
+        bool temperature_mode;
     } render_t;
 
     typedef struct vrect_s {
@@ -192,10 +193,20 @@
         bool paused;
     } events_t;
 
+    typedef enum {
+        place,
+        destroy,
+        replace,
+        cool,
+        heat,
+        NB_BRUSH_MODES,
+    } brush_mode;
+
     typedef struct brush_s {
         sfCircleShape *shape;
         unsigned int radius;
         int id;
+        brush_mode mode;
     } brush_t;
 
     struct core_s {

@@ -16,7 +16,7 @@ data_t create_ice(void)
     data.density = 0.917;
     data.state = static_solid;
     data.inertia = (sfVector2i){0, 0};
-    data.temperature = -50;
+    data.temperature = -273;
     data.flammability = 0;
     data.conductivity = 2.1;
     data.life_time = INFINITY;

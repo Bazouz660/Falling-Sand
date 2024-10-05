@@ -8,7 +8,7 @@
 #ifndef SAND_INCLUDES
     #define SAND_INCLUDES
 
-    #include "SFML/Graphics.h"
+    #include <SFML/Graphics.h>
     #include <SFML/Config.h>
     #include <SFML/Audio.h>
     #include <SFML/System.h>

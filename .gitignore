@@ -56,3 +56,9 @@ Sand
 
 # VsCode Settings
 .vscode/settings.json
+
+# Build directory
+build/
+
+# Libraries
+*.dll

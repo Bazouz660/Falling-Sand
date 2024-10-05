@@ -19,3 +19,8 @@ void toggle_pause(core_t *c, switch_key_t *key)
 {
     c->events.paused = key->state;
 }
+
+void toggle_temperature_mode(core_t *c, switch_key_t *key)
+{
+    c->render.temperature_mode = key->state;
+}
