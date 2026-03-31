@@ -7,13 +7,11 @@
 ** Wave equation: advection carries pressure along velocity,
 ** gradient converts pressure differences into velocity.
 ** Hot gases act as pressure sources (thermal expansion).
-** Sponge layer at edges absorbs outgoing waves.
+** Open boundaries: outside the simulation is ambient pressure.
 */
 
 #include "prototypes.h"
 #include <string.h>
-
-#define SPONGE_WIDTH 5
 
 static void scan_grid(map_t *map, bool *blocked, float *heat_src)
 {
@@ -46,24 +44,25 @@ static void scan_grid(map_t *map, bool *blocked, float *heat_src)
     }
 }
 
+static bool is_inside(int aw, int ah, int x, int y)
+{
+    return x >= 0 && x < aw && y >= 0 && y < ah;
+}
+
 static bool is_open(bool *blocked, int aw, int ah, int x, int y)
 {
-    if (x < 0 || x >= aw || y < 0 || y >= ah)
+    if (!is_inside(aw, ah, x, y))
         return false;
     return !blocked[y * aw + x];
 }
 
-static float get_sponge_factor(int x, int y, int aw, int ah)
+static float sample_pressure(map_t *map, bool *blocked, int x, int y)
 {
-    int dx = x;
-    if (aw - 1 - x < dx) dx = aw - 1 - x;
-    int dy = y;
-    if (ah - 1 - y < dy) dy = ah - 1 - y;
-    int dist = dx < dy ? dx : dy;
-
-    if (dist >= SPONGE_WIDTH)
-        return 1.0f;
-    return (float)dist / (float)SPONGE_WIDTH;
+    if (!is_inside(map->air_dim.x, map->air_dim.y, x, y))
+        return 0.0f;
+    if (blocked[y * map->air_dim.x + x])
+        return 0.0f;
+    return PMAP(map, x, y);
 }
 
 static void advect_pressure(map_t *map, bool *blocked)
@@ -75,8 +74,8 @@ static void advect_pressure(map_t *map, bool *blocked)
 
     memset(new_p, 0, sizeof(float) * n);
 
-    for (int y = 1; y < ah - 1; y++) {
-        for (int x = 1; x < aw - 1; x++) {
+    for (int y = 0; y < ah; y++) {
+        for (int x = 0; x < aw; x++) {
             if (blocked[y * aw + x])
                 continue;
 
@@ -91,27 +90,18 @@ static void advect_pressure(map_t *map, bool *blocked)
             float src_x = (float)x - cvx;
             float src_y = (float)y - cvy;
 
-            if (src_x < 0.5f) src_x = 0.5f;
-            if (src_y < 0.5f) src_y = 0.5f;
-            if (src_x > aw - 1.5f) src_x = aw - 1.5f;
-            if (src_y > ah - 1.5f) src_y = ah - 1.5f;
-
             int ix = (int)src_x;
             int iy = (int)src_y;
             float fx = src_x - ix;
             float fy = src_y - iy;
 
-            int ix1 = ix + 1 < aw ? ix + 1 : ix;
-            int iy1 = iy + 1 < ah ? iy + 1 : iy;
+            int ix1 = ix + 1;
+            int iy1 = iy + 1;
 
-            float p00 = is_open(blocked, aw, ah, ix, iy)
-                ? PMAP(map, ix, iy) : 0;
-            float p10 = is_open(blocked, aw, ah, ix1, iy)
-                ? PMAP(map, ix1, iy) : 0;
-            float p01 = is_open(blocked, aw, ah, ix, iy1)
-                ? PMAP(map, ix, iy1) : 0;
-            float p11 = is_open(blocked, aw, ah, ix1, iy1)
-                ? PMAP(map, ix1, iy1) : 0;
+            float p00 = sample_pressure(map, blocked, ix, iy);
+            float p10 = sample_pressure(map, blocked, ix1, iy);
+            float p01 = sample_pressure(map, blocked, ix, iy1);
+            float p11 = sample_pressure(map, blocked, ix1, iy1);
 
             float top = p00 * (1.0f - fx) + p10 * fx;
             float bot = p01 * (1.0f - fx) + p11 * fx;
@@ -127,21 +117,25 @@ static void apply_gradient(map_t *map, bool *blocked)
     int aw = map->air_dim.x;
     int ah = map->air_dim.y;
 
-    for (int y = 1; y < ah - 1; y++) {
-        for (int x = 1; x < aw - 1; x++) {
+    for (int y = 0; y < ah; y++) {
+        for (int x = 0; x < aw; x++) {
             if (blocked[y * aw + x])
                 continue;
 
             float p = PMAP(map, x, y);
 
-            float pl = is_open(blocked, aw, ah, x - 1, y)
-                ? PMAP(map, x - 1, y) : p;
-            float pr = is_open(blocked, aw, ah, x + 1, y)
-                ? PMAP(map, x + 1, y) : p;
-            float pu = is_open(blocked, aw, ah, x, y - 1)
-                ? PMAP(map, x, y - 1) : p;
-            float pd = is_open(blocked, aw, ah, x, y + 1)
-                ? PMAP(map, x, y + 1) : p;
+            float pl = is_inside(aw, ah, x - 1, y)
+                ? (is_open(blocked, aw, ah, x - 1, y) ? PMAP(map, x - 1, y) : p)
+                : 0.0f;
+            float pr = is_inside(aw, ah, x + 1, y)
+                ? (is_open(blocked, aw, ah, x + 1, y) ? PMAP(map, x + 1, y) : p)
+                : 0.0f;
+            float pu = is_inside(aw, ah, x, y - 1)
+                ? (is_open(blocked, aw, ah, x, y - 1) ? PMAP(map, x, y - 1) : p)
+                : 0.0f;
+            float pd = is_inside(aw, ah, x, y + 1)
+                ? (is_open(blocked, aw, ah, x, y + 1) ? PMAP(map, x, y + 1) : p)
+                : 0.0f;
 
             VX(map, x, y) += (pl - pr) * VELOCITY_FACTOR;
             VY(map, x, y) += (pu - pd) * VELOCITY_FACTOR;
@@ -166,8 +160,7 @@ void update_pressure(map_t *map)
 
     for (int y = 0; y < ah; y++) {
         for (int x = 0; x < aw; x++) {
-            float sponge = get_sponge_factor(x, y, aw, ah);
-            float damp = AIR_LOSS * sponge;
+            float damp = AIR_LOSS;
 
             PMAP(map, x, y) *= damp;
             VX(map, x, y) *= damp;

@@ -109,7 +109,7 @@ void draw_pressure_mode(core_t *c)
 
             float sign = p >= 0 ? 1.0f : -1.0f;
             float ap = p >= 0 ? p : -p;
-            float norm = log2f(1.0f + ap) / 3.0f;
+            float norm = ap / (ap + 60.0f);
             if (norm > 1.0f) norm = 1.0f;
             norm *= sign;
 

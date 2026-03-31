@@ -6,6 +6,7 @@
 */
 
 #include "prototypes.h"
+#include <math.h>
 
 static bool should_detonate(map_t *map, int x, int y)
 {
@@ -26,7 +27,8 @@ static bool should_detonate(map_t *map, int x, int y)
     int ax = x / AIR_CELL;
     int ay = y / AIR_CELL;
     if (ax >= 0 && ax < map->air_dim.x && ay >= 0 && ay < map->air_dim.y)
-        if (PMAP(map, ax, ay) > EXPLOSION_PRESSURE * 0.5f)
+        if (PMAP(map, ax, ay) > EXPLOSION_PRESSURE
+            && random_number(0, 100) < 15)
             return true;
     return false;
 }
@@ -35,11 +37,30 @@ void explode(map_t *map, int cx, int cy, int radius)
 {
     int ax = cx / AIR_CELL;
     int ay = cy / AIR_CELL;
+    int ar = radius / AIR_CELL;
 
     if (ax < 0 || ax >= map->air_dim.x
         || ay < 0 || ay >= map->air_dim.y)
         return;
-    PMAP(map, ax, ay) += EXPLOSION_PRESSURE;
+    if (ar < 1)
+        ar = 1;
+
+    for (int y = ay - ar; y <= ay + ar; y++) {
+        for (int x = ax - ar; x <= ax + ar; x++) {
+            if (x < 0 || x >= map->air_dim.x || y < 0 || y >= map->air_dim.y)
+                continue;
+            float dx = (float)(x - ax);
+            float dy = (float)(y - ay);
+            float dist = sqrtf(dx * dx + dy * dy);
+            if (dist > (float)ar)
+                continue;
+
+            float t = 1.0f - (dist / (float)ar);
+            float burst = EXPLOSION_PRESSURE * t * t;
+
+            PMAP(map, x, y) += burst;
+        }
+    }
 }
 
 void update_gunpowder(clock_st clock, map_t *map, int x, int y)
@@ -48,10 +69,10 @@ void update_gunpowder(clock_st clock, map_t *map, int x, int y)
         float temp = GRID(map, x, y).data.temperature;
 
         GRID(map, x, y).data = create_fire();
-        GRID(map, x, y).data.temperature = 1500;
-        if (temp > 1500)
+        GRID(map, x, y).data.temperature = 700;
+        if (temp > 700)
             GRID(map, x, y).data.temperature = temp;
-        explode(map, x, y, 0);
+        explode(map, x, y, AIR_CELL * 2);
         return;
     }
     move_movable_solid(map, x, y);

@@ -35,15 +35,15 @@
     #define key_pressed(key) sfKeyboard_isKeyPressed(key)
 
     #define MIN_TEMPERATURE -273.15
-    #define MAX_TEMPERATURE 5000
+    #define MAX_TEMPERATURE 9999.0
 
     #define AIR_CELL 4
     #define AIR_LOSS 0.999f
     #define VELOCITY_FACTOR 0.4f
     #define VELOCITY_LOSS 0.999f
-    #define PRESSURE_ITERATIONS 4
+    #define PRESSURE_ITERATIONS 2
     #define MAX_CFL 0.9f
-    #define EXPLOSION_PRESSURE 120.0f
+    #define EXPLOSION_PRESSURE 55.0f
     #define HEAT_PRESSURE_FACTOR 0.00005f
 
 #endif /*SAND_DEFINES*/
