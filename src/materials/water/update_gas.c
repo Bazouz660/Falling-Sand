@@ -9,7 +9,7 @@
 
 void update_steam(clock_st clock, map_t *map, int x, int y)
 {
-    if (!update_voxel_life_time(clock, &map->grid[x][y].data))
+    if (!update_voxel_life_time(clock, &GRID(map, x, y).data))
         return;
     if (solidify(map, x, y, 0, ice))
         return;

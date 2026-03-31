@@ -9,34 +9,25 @@
 
 static void update_voxel(core_t *c, map_t *map, int x, int y)
 {
-    if (map->grid[x][y].data.id == empty || map->grid[x][y].data.has_updated == true)
+    int id = GRID(map, x, y).data.id;
+    if (id == empty || GRID(map, x, y).data.has_updated == true)
         return;
-    if (map->grid[x][y].data.id == sand)
-        update_sand(map, x, y);
-    if (map->grid[x][y].data.id == water)
-        update_water(map, x, y);
-    if (map->grid[x][y].data.id == stone)
-        update_stone(map, x, y);
-    if (map->grid[x][y].data.id == black_hole)
-        update_black_hole(map, x, y);
-    if (map->grid[x][y].data.id == acid)
-        update_acid(map, x, y);
-    if (map->grid[x][y].data.id == clone)
-        update_clone(map, x, y);
-    if (map->grid[x][y].data.id == steam)
-        update_steam(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == lava)
-        update_lava(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == ice)
-        update_ice(map, x, y);
-    if (map->grid[x][y].data.id == caustic_gas)
-        update_caustic_gas(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == wood)
-        update_wood(map, x, y);
-    if (map->grid[x][y].data.id == fire)
-        update_fire(c->clock, map, x, y);
-    if (map->grid[x][y].data.id == smoke)
-        update_smoke(c->clock, map, x, y);
+    switch (id) {
+        case sand:        update_sand(map, x, y); break;
+        case water:       update_water(map, x, y); break;
+        case stone:       update_stone(map, x, y); break;
+        case black_hole:  update_black_hole(map, x, y); break;
+        case acid:        update_acid(map, x, y); break;
+        case clone:       update_clone(map, x, y); break;
+        case steam:       update_steam(c->clock, map, x, y); break;
+        case lava:        update_lava(c->clock, map, x, y); break;
+        case ice:         update_ice(map, x, y); break;
+        case caustic_gas: update_caustic_gas(c->clock, map, x, y); break;
+        case wood:        update_wood(map, x, y); break;
+        case fire:        update_fire(c->clock, map, x, y); break;
+        case smoke:       update_smoke(c->clock, map, x, y); break;
+        default: break;
+    }
     update_heat(map, x, y);
 }
 
@@ -57,14 +48,12 @@ void update_grid(core_t *c)
             }
         }
     }
-    for (int x = 0; x < c->map.dim.x; x++) {
-        for (int y = 0; y < c->map.dim.y; y++) {
-            c->map.grid[x][y].data.has_updated = false;
-            if (c->map.grid[x][y].data.id == 0)
-                c->map.grid[x][y].data.color = sfBlack;
-            c->map.buffer[index].color = c->map.grid[x][y].data.color;
-            c->map.buffer[index].position.x = x;
-            c->map.buffer[index].position.y = y;
+    for (int y = 0; y < c->map.dim.y; y++) {
+        for (int x = 0; x < c->map.dim.x; x++) {
+            GRID(&c->map, x, y).data.has_updated = false;
+            if (GRID(&c->map, x, y).data.id == 0)
+                GRID(&c->map, x, y).data.color = sfBlack;
+            c->map.buffer[index].color = GRID(&c->map, x, y).data.color;
             index++;
         }
     }

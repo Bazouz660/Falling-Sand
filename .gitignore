@@ -60,5 +60,13 @@ Sand
 # Build directory
 build/
 
+# Downloaded dependencies
+.deps/
+OpenAL32.dll
+csfml-*.dll
+
 # Libraries
 *.dll
+
+# Scons build files
+.sconsign.dblite

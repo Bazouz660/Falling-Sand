@@ -10,6 +10,11 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 # Set release mode
 set(CMAKE_BUILD_TYPE Release)
 
+# Optimization flags
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-O3 -march=native -flto)
+endif()
+
 # Include directories
 include_directories(
     ${PROJECT_SOURCE_DIR}/include

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/btrebus/Git/Falling-Sand/src/materials/water -name *.c)",
+      "Bash(find /c/Users/btrebus/Git/Falling-Sand/src/materials -name *.c)"
+    ]
+  }
+}

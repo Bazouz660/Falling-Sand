@@ -164,7 +164,6 @@ void init_keys(core_t *c)
 void init_map(core_t *c)
 {
     sfVector2i dim = {640, 360};
-    sfVector2f pos = {0, 0};
     sfVector2f c_size = {5, 5};
     int index = 0;
 
@@ -174,19 +173,16 @@ void init_map(core_t *c)
     c->map.current_cell = (sfVector2u){0, 0};
     c->map.last_cell = c->map.current_cell;
     c->map.v_buffer = sfVertexBuffer_create(c->map.nb_case, sfPoints, sfVertexBufferStream);
-    c->map.grid = malloc(sizeof(voxel_t *) * (dim.x + 1));
+    c->map.grid = malloc(sizeof(voxel_t) * c->map.nb_case);
     c->map.buffer = malloc(sizeof(sfVertex) * (c->map.nb_case + 1));
-    for (int x = 0; x < c->map.dim.x; x++) {
-        c->map.grid[x] = malloc(sizeof(voxel_t) * (dim.y + 1));
-        for (int y = 0; y < c->map.dim.y; y++) {
-            pos.y = y;
-            c->map.grid[x][y].data = create_data(empty);
-            destroy_voxel(&c->map.grid[x][y].stored_data);
-            c->map.buffer[index].position = pos;
-            c->map.buffer[index].color = c->map.grid[x][y].data.color;
+    for (int y = 0; y < c->map.dim.y; y++) {
+        for (int x = 0; x < c->map.dim.x; x++) {
+            GRID(&c->map, x, y).data = create_data(empty);
+            destroy_voxel(&GRID(&c->map, x, y).stored_data);
+            c->map.buffer[index].position = (sfVector2f){x, y};
+            c->map.buffer[index].color = GRID(&c->map, x, y).data.color;
             index++;
         }
-        pos.x++;
     }
 }
 

@@ -9,7 +9,7 @@
 
 void update_smoke(clock_st clock, map_t *map, int x, int y)
 {
-    if (!update_voxel_life_time(clock, &map->grid[x][y].data))
+    if (!update_voxel_life_time(clock, &GRID(map, x, y).data))
         return;
     move_gas(map, x, y);
 }

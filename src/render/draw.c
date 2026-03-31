@@ -48,8 +48,8 @@ void draw_temperature_mode(core_t *c)
 
     for (int x = 0; x < c->map.dim.x; x++) {
         for (int y = 0; y < c->map.dim.y; y++) {
-            if (c->map.grid[x][y].data.id != empty) {
-                float temp = c->map.grid[x][y].data.temperature;
+            if (GRID(&c->map, x, y).data.id != empty) {
+                float temp = GRID(&c->map, x, y).data.temperature;
 
                 int r, g, b;
                 if (temp <= mid_temp) {

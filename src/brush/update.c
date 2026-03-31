@@ -84,7 +84,7 @@ bool inside_circle(sfVector2i center, sfVector2i tile, float radius)
 
 void apply_brush_action(core_t *c, sfVector2i pos, int id, brush_mode mode)
 {
-    data_t *voxel = &c->map.grid[pos.x][pos.y].data;
+    data_t *voxel = &GRID(&c->map, pos.x, pos.y).data;
 
     switch (mode) {
         case place:

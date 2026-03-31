@@ -59,12 +59,10 @@
         float conductivity;
         float temperature;
         float flammability;
-        float mass;
         bool has_updated;
         short state;
         sfVector2i velocity;
         sfVector2i inertia;
-        sfVector2u speed;
         sfColor color;
     } data_t;
 
@@ -80,7 +78,7 @@
         sfVector2u last_cell;
         sfVector2u current_cell;
         int nb_case;
-        voxel_t **grid;
+        voxel_t *grid;
         sfVertex *buffer;
         sfVertexBuffer *v_buffer;
     } map_t;

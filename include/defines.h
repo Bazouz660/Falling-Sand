@@ -24,6 +24,8 @@
 
     #define gravity 9
 
+    #define GRID(map, gx, gy) ((map)->grid[(gy) * (map)->dim.x + (gx)])
+
     #define TransparentRed (sfColor){255, 0, 0, 100}
 
     #define new_texture(path, intrect) sfTexture_createFromFile(path, intrect)

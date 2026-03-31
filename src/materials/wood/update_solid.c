@@ -9,7 +9,7 @@
 
 void update_wood(map_t *map, int x, int y)
 {
-    if (burn(&map->grid[x][y].data, 600))
+    if (burn(&GRID(map, x, y).data, 600))
         return;
     0;
 }

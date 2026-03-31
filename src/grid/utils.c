@@ -30,7 +30,7 @@ bool is_in_grid(map_t *map, sfVector2i pos)
 {
     sfVector2i dim = map->dim;
 
-    if (pos.x < dim.x && pos.x >= 0 && pos.y < dim.y - 1 && pos.y >= 0)
+    if (pos.x < dim.x && pos.x >= 0 && pos.y < dim.y && pos.y >= 0)
         return true;
     return false;
 }
@@ -120,24 +120,24 @@ void ambient_heat(data_t *a, int x, int y)
 
 void update_heat(map_t *map, int x, int y)
 {
-    ambient_heat(&map->grid[x][y].data, x, y);
+    ambient_heat(&GRID(map, x, y).data, x, y);
     if (is_in_grid(map, (sfVector2i){x, y + 1}))
-        if (map->grid[x][y + 1].data.temperature != map->grid[x][y].data.temperature) {
-            transfer_heat(&map->grid[x][y + 1].data, &map->grid[x][y].data);
+        if (GRID(map, x, y + 1).data.temperature != GRID(map, x, y).data.temperature) {
+            transfer_heat(&GRID(map, x, y + 1).data, &GRID(map, x, y).data);
         }
 
     if (is_in_grid(map, (sfVector2i){x, y - 1}))
-        if (map->grid[x][y - 1].data.temperature != map->grid[x][y].data.temperature) {
-            transfer_heat(&map->grid[x][y - 1].data, &map->grid[x][y].data);
+        if (GRID(map, x, y - 1).data.temperature != GRID(map, x, y).data.temperature) {
+            transfer_heat(&GRID(map, x, y - 1).data, &GRID(map, x, y).data);
         }
 
     if (is_in_grid(map, (sfVector2i){x + 1, y}))
-        if (map->grid[x + 1][y].data.temperature != map->grid[x][y].data.temperature) {
-            transfer_heat(&map->grid[x + 1][y].data, &map->grid[x][y].data);
+        if (GRID(map, x + 1, y).data.temperature != GRID(map, x, y).data.temperature) {
+            transfer_heat(&GRID(map, x + 1, y).data, &GRID(map, x, y).data);
         }
 
     if (is_in_grid(map, (sfVector2i){x - 1, y}))
-        if (map->grid[x - 1][y].data.temperature != map->grid[x][y].data.temperature) {
-            transfer_heat(&map->grid[x - 1][y].data, &map->grid[x][y].data);
+        if (GRID(map, x - 1, y).data.temperature != GRID(map, x, y).data.temperature) {
+            transfer_heat(&GRID(map, x - 1, y).data, &GRID(map, x, y).data);
         }
 }

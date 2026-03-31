@@ -27,11 +27,7 @@ int random_number(int min_num, int max_num)
 
 int rand_range(int lower, int upper)
 {
-    int num = 0;
-
-    for (int i = 0; i < 10; i++)
-        num = (rand() % (upper - lower + 1)) + lower;
-    return num;
+    return (rand() % (upper - lower + 1)) + lower;
 }
 
 float random_float(float scale)

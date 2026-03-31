@@ -12,18 +12,18 @@ void update_black_hole(map_t *map, int x, int y)
     
 
     if (is_in_grid(map, (sfVector2i){x, y + 1}))
-        if (map->grid[x][y + 1].data.id != 4)
-            destroy_voxel(&map->grid[x][y + 1].data);
+        if (GRID(map, x, y + 1).data.id != 4)
+            destroy_voxel(&GRID(map, x, y + 1).data);
 
     if (is_in_grid(map, (sfVector2i){x, y - 1}))
-        if (map->grid[x][y - 1].data.id != 4)
-            destroy_voxel(&map->grid[x][y - 1].data);
+        if (GRID(map, x, y - 1).data.id != 4)
+            destroy_voxel(&GRID(map, x, y - 1).data);
 
     if (is_in_grid(map, (sfVector2i){x + 1, y}))
-        if (map->grid[x + 1][y].data.id != 4)
-            destroy_voxel(&map->grid[x + 1][y].data);
+        if (GRID(map, x + 1, y).data.id != 4)
+            destroy_voxel(&GRID(map, x + 1, y).data);
 
     if (is_in_grid(map, (sfVector2i){x - 1, y}))
-        if (map->grid[x - 1][y].data.id != 4)
-            destroy_voxel(&map->grid[x - 1][y].data);
+        if (GRID(map, x - 1, y).data.id != 4)
+            destroy_voxel(&GRID(map, x - 1, y).data);
 }
