@@ -49,6 +49,8 @@ static bool move_down_right(map_t *map, int x, int y)
 
 void move_movable_solid(map_t *map, int x, int y)
 {
+    if (apply_air_velocity(map, x, y))
+        return;
     if (!move_down(map, x, y)) {
         if (random_number(-100, 100) > 0) {
             if (!move_down_right(map, x, y))

@@ -17,6 +17,7 @@ data_t create_sand(void)
     data.color = sfYellow;
     data.temperature = 20;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 0.2;
     data.state = movable_solid;
     data.inertia = (sfVector2i){0, 0};

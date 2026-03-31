@@ -141,3 +141,88 @@ void update_heat(map_t *map, int x, int y)
             transfer_heat(&GRID(map, x - 1, y).data, &GRID(map, x, y).data);
         }
 }
+
+void apply_pressure_effects(map_t *map, int x, int y)
+{
+    data_t *d = &GRID(map, x, y).data;
+    int ax = x / AIR_CELL;
+    int ay = y / AIR_CELL;
+
+    if (d->id == empty)
+        return;
+    if (ax < 0 || ax >= map->air_dim.x
+        || ay < 0 || ay >= map->air_dim.y)
+        return;
+
+    float p = PMAP(map, ax, ay);
+    float ap = p > 0 ? p : -p;
+
+    if (ap > 10.0f)
+        d->temperature += ap * 0.02f;
+    if (ap > 80.0f && d->state != static_solid
+        && random_number(0, 1000) < (int)(ap * 0.3f)) {
+        destroy_voxel(d);
+    }
+    if (ap > 200.0f && d->state == static_solid
+        && d->id != black_hole
+        && random_number(0, 1000) < (int)(ap * 0.05f)) {
+        destroy_voxel(d);
+    }
+}
+
+bool apply_air_velocity(map_t *map, int x, int y)
+{
+    int ax = x / AIR_CELL;
+    int ay = y / AIR_CELL;
+
+    if (ax < 0 || ax >= map->air_dim.x
+        || ay < 0 || ay >= map->air_dim.y)
+        return false;
+
+    float vel_x = VX(map, ax, ay);
+    float vel_y = VY(map, ax, ay);
+    bool moved = false;
+    int cx = x;
+    int cy = y;
+
+    if (vel_x > -0.5f && vel_x < 0.5f
+        && vel_y > -0.5f && vel_y < 0.5f)
+        return false;
+
+    int dy = vel_y > 0 ? 1 : (vel_y < 0 ? -1 : 0);
+    int abs_y = (int)(vel_y > 0 ? vel_y : -vel_y);
+    if (abs_y > 8) abs_y = 8;
+
+    for (int i = 0; i < abs_y; i++) {
+        int ny = cy + dy;
+        if (!is_in_grid(map, (sfVector2i){cx, ny}))
+            break;
+        data_t *dst = &GRID(map, cx, ny).data;
+        if (dst->id == empty || (dst->state != static_solid
+            && GRID(map, cx, cy).data.density > dst->density)) {
+            swap_voxel(&GRID(map, cx, cy).data, dst);
+            cy = ny;
+            moved = true;
+        } else
+            break;
+    }
+
+    int dx = vel_x > 0 ? 1 : (vel_x < 0 ? -1 : 0);
+    int abs_x = (int)(vel_x > 0 ? vel_x : -vel_x);
+    if (abs_x > 8) abs_x = 8;
+
+    for (int i = 0; i < abs_x; i++) {
+        int nx = cx + dx;
+        if (!is_in_grid(map, (sfVector2i){nx, cy}))
+            break;
+        data_t *dst = &GRID(map, nx, cy).data;
+        if (dst->id == empty || (dst->state != static_solid
+            && GRID(map, cx, cy).data.density > dst->density)) {
+            swap_voxel(&GRID(map, cx, cy).data, dst);
+            cx = nx;
+            moved = true;
+        } else
+            break;
+    }
+    return moved;
+}

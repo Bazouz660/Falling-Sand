@@ -18,6 +18,7 @@ data_t create_lava(void)
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 3000;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 5.2;
     data.life_time = INFINITY;
     data.life_counter = 0;

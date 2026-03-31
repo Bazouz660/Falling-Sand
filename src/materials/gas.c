@@ -134,8 +134,9 @@ static bool choose_side(map_t *map, int x, int y)
 
 void move_gas(map_t *map, int x, int y)
 {
-    if (!can_move(map, x, y)) {
+    if (apply_air_velocity(map, x, y))
         return;
-    }
+    if (!can_move(map, x, y))
+        return;
     choose_side(map, x, y);
 }

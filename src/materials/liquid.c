@@ -7,42 +7,43 @@
 
 #include "prototypes.h"
 
-static bool can_move(map_t *map, int x, int y)
+static bool can_displace(data_t *src, data_t *dst)
 {
-    if (is_in_grid(map, (sfVector2i){x, y + 1}))
-        if (GRID(map, x, y).data.density > GRID(map, x, y + 1).data.density);
-            return true;
-    if (is_in_grid(map, (sfVector2i){x + 1, y + 1}))
-        if (GRID(map, x, y).data.density > GRID(map, x + 1, y + 1).data.density);
-            return true;
-    if (is_in_grid(map, (sfVector2i){x - 1, y + 1}))
-        if (GRID(map, x, y).data.density > GRID(map, x - 1, y + 1).data.density);
-            return true;
-    if (is_in_grid(map, (sfVector2i){x + 1, y}))
-        if (GRID(map, x, y).data.density > GRID(map, x + 1, y).data.density);
-            return true;
-    if (is_in_grid(map, (sfVector2i){x - 1, y}))
-        if (GRID(map, x, y).data.density > GRID(map, x - 1, y).data.density);
-            return true;
+    if (dst->state == static_solid)
+        return false;
+    if (src->density > dst->density)
+        return true;
     return false;
 }
 
-static bool move_down(map_t *map, int x, int y)
+static bool can_move(map_t *map, int x, int y)
+{
+    sfVector2i dirs[] = {{0, 1}, {1, 1}, {-1, 1}, {1, 0}, {-1, 0}};
+
+    for (int i = 0; i < 5; i++) {
+        int nx = x + dirs[i].x;
+        int ny = y + dirs[i].y;
+        if (is_in_grid(map, (sfVector2i){nx, ny})
+            && can_displace(&GRID(map, x, y).data, &GRID(map, nx, ny).data))
+            return true;
+    }
+    return false;
+}
+
+static int move_down(map_t *map, int x, int y)
 {
     data_t data = GRID(map, x, y).data;
-    unsigned int moved = 0;
+    int moved = 0;
 
-    for (int i = 1; i < data.velocity.y + 1; i++) {
-        if (is_in_grid(map, (sfVector2i){x, y + i})) {
-            if (GRID(map, x, y + i - 1).data.density > GRID(map, x, y + i).data.density
-                && GRID(map, x, y + i).data.state != static_solid) {
-                swap_voxel(&GRID(map, x, y + i).data, &GRID(map, x, y + i - 1).data);
-                GRID(map, x, y + i).data.inertia.y = 1;
-                moved++;
-            } else {
-                GRID(map, x, y + i - 1).data.inertia.y = 0;
-                break;
-            }
+    for (int i = 1; i <= data.velocity.y; i++) {
+        if (!is_in_grid(map, (sfVector2i){x, y + i}))
+            break;
+        if (can_displace(&GRID(map, x, y + i - 1).data,
+            &GRID(map, x, y + i).data)) {
+            swap_voxel(&GRID(map, x, y + i).data,
+                &GRID(map, x, y + i - 1).data);
+            GRID(map, x, y + i).data.inertia.y = 1;
+            moved++;
         } else {
             GRID(map, x, y + i - 1).data.inertia.y = 0;
             break;
@@ -51,88 +52,57 @@ static bool move_down(map_t *map, int x, int y)
     return moved;
 }
 
-static bool move_right(map_t *map, int x, int y)
+static int move_horizontal(map_t *map, int x, int y, int dir)
 {
     data_t data = GRID(map, x, y).data;
-    unsigned int moved = 0;
-    sfVector2i avail_moves = {data.velocity.x, data.velocity.y};
-    sfVector2i i = {1, 1};
+    int moved = 0;
+    int max_spread = data.velocity.x;
 
-    while (i.x < avail_moves.x && i.y < avail_moves.y) {
-        moved = 0;
-        if (move_down(map, x + i.x - 1, y + i.y - 1))
+    for (int i = 1; i <= max_spread; i++) {
+        int nx = x + dir * i;
+        int prev_x = x + dir * (i - 1);
+
+        if (move_down(map, prev_x, y)) {
+            moved++;
             break;
-        if (is_in_grid(map, (sfVector2i){x + i.x, y + i.y - 1})) {
-            if (GRID(map, x + i.x - 1, y).data.density > GRID(map, x + i.x, y).data.density && GRID(map, x + i.x, y).data.state != static_solid) {
-                swap_voxel(&GRID(map, x + i.x, y).data, &GRID(map, x + i.x - 1, y).data);
-                GRID(map, x + i.x, y).data.inertia.x = 1;
-                i.x ++;
-            } else if (!move_down(map, x + i.x - 1, y + i.y - 1)) {
-                if (GRID(map, x + i.x - 1, y).data.inertia.x != GRID(map, x + i.x, y).data.inertia.x)
-                    GRID(map, x + i.x - 1, y).data.inertia.x = 0;
-                break;
-            }
+        }
+        if (!is_in_grid(map, (sfVector2i){nx, y}))
+            break;
+        if (can_displace(&GRID(map, prev_x, y).data,
+            &GRID(map, nx, y).data)) {
+            swap_voxel(&GRID(map, nx, y).data, &GRID(map, prev_x, y).data);
+            GRID(map, nx, y).data.inertia.x = dir;
+            moved++;
         } else {
-            GRID(map, x + i.x - 1, y).data.inertia.x = 0;
+            if (GRID(map, prev_x, y).data.inertia.x != dir)
+                GRID(map, prev_x, y).data.inertia.x = 0;
             break;
         }
     }
-    return get_max(i.x, i.y);
+    return moved;
 }
 
-static bool move_left(map_t *map, int x, int y)
+static void choose_side(map_t *map, int x, int y)
 {
     data_t data = GRID(map, x, y).data;
-    unsigned int moved = 0;
-    sfVector2i avail_moves = {data.velocity.x, data.velocity.y};
-    sfVector2i i = {1, 1};
-
-    while (i.x < avail_moves.x && i.y < avail_moves.y) {
-        moved = 0;
-        if (move_down(map, x - i.x + 1, y + i.y - 1))
-            break;
-        if (is_in_grid(map, (sfVector2i){x - i.x, y + i.y - 1})) {
-            if (GRID(map, x - i.x + 1, y).data.density > GRID(map, x - i.x, y).data.density && GRID(map, x - i.x, y).data.state != static_solid) {
-                swap_voxel(&GRID(map, x - i.x, y).data, &GRID(map, x - i.x + 1, y).data);
-                GRID(map, x - i.x, y).data.inertia.x = -1;
-                i.x++;
-            } else if (!move_down(map, x - i.x + 1, y + i.y - 1)) {
-                if (GRID(map, x - i.x, y).data.inertia.x != GRID(map, x - i.x + 1, y).data.inertia.x)
-                    GRID(map, x - i.x + 1, y).data.inertia.x = 0;
-                break;
-            }
-        } else {
-            GRID(map, x - i.x + 1, y).data.inertia.x = 0;
-            break;
-        }
-    }
-    return get_max(i.x, i.y);
-}
-
-static bool choose_side(map_t *map, int x, int y)
-{
-    data_t data = GRID(map, x, y).data;
-    bool side;
+    int side;
 
     if (data.inertia.x == 0)
-        side = random_number(0, 1);
-    else if (data.inertia.x == 1)
-        side = 1;
-    else if (data.inertia.x == -1)
-        side = 0;
+        side = random_number(0, 1) ? 1 : -1;
+    else
+        side = data.inertia.x;
 
-    if (side) {
-        if (!move_right(map, x, y))
-            return move_left(map, x, y);
-    } else
-        if (!move_left(map, x, y))
-            return move_right(map, x, y);
+    if (!move_horizontal(map, x, y, side))
+        move_horizontal(map, x, y, -side);
 }
 
 void move_liquid(map_t *map, int x, int y)
 {
-    if (!can_move(map, x, y)) {
+    if (apply_air_velocity(map, x, y))
         return;
-    }
+    if (!can_move(map, x, y))
+        return;
+    if (move_down(map, x, y))
+        return;
     choose_side(map, x, y);
 }

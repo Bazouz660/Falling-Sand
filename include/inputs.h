@@ -17,3 +17,4 @@ void on_click_set_brush_id(core_t *c, button_t *button);
 void toggle_fullscreen(core_t *c, switch_key_t *key);
 void toggle_pause(core_t *c, switch_key_t *key);
 void toggle_temperature_mode(core_t *c, switch_key_t *key);
+void toggle_pressure_mode(core_t *c, switch_key_t *key);

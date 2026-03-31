@@ -18,6 +18,7 @@ data_t create_wood(void)
     data.color = (sfColor){133, 94, 66, 255};
     data.temperature = 20;
     data.flammability = 0.4;
+    data.pressure = 0;
     data.conductivity = 0.15;
     data.inertia = (sfVector2i){0, 0};
     data.life_time = INFINITY;

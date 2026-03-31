@@ -18,6 +18,7 @@ data_t create_smoke(void)
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 300;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 0.016;
     data.life_time = 2.0;
     data.life_counter = 0;

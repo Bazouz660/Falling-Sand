@@ -41,6 +41,7 @@
         wood,
         fire,
         smoke,
+        gunpowder,
         NB_MATERIALS,
     } materials_e;
 
@@ -59,6 +60,7 @@
         float conductivity;
         float temperature;
         float flammability;
+        float pressure;
         bool has_updated;
         short state;
         sfVector2i velocity;
@@ -81,6 +83,11 @@
         voxel_t *grid;
         sfVertex *buffer;
         sfVertexBuffer *v_buffer;
+        sfVector2i air_dim;
+        int air_count;
+        float *pmap;
+        float *vx;
+        float *vy;
     } map_t;
 
     typedef struct ofrect_s {
@@ -122,6 +129,7 @@
         bool fullscreen;
         unsigned short scene;
         bool temperature_mode;
+        bool pressure_mode;
     } render_t;
 
     typedef struct vrect_s {

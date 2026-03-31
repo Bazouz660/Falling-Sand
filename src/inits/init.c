@@ -51,7 +51,8 @@ void init_textures(core_t *c)
     c->textures.button[12] = new_texture("assets/buttons/wood.png", NULL);
     c->textures.button[13] = new_texture("assets/buttons/fire.png", NULL);
     c->textures.button[14] = new_texture("assets/buttons/smoke.png", NULL);
-    c->textures.button[15] = NULL;
+    c->textures.button[15] = new_texture("assets/buttons/gunpowder.png", NULL);
+    c->textures.button[16] = NULL;
 
 }
 
@@ -89,13 +90,15 @@ void init_material_buttons(core_t *c)
     (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.65});
     c->ui.button[14] = button_create(c->textures.button[14],
     (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.70});
+    c->ui.button[15] = button_create(c->textures.button[15],
+    (sfVector2f){32, 32}, (sfVector2f){c->render.w_size.x * 0.95, c->render.w_size.y * 0.75});
 
 
     for (int i = 2; i < NB_MATERIALS + 1; i++) {
         button_link_scene(c->ui.button[i], 1);
         button_set_onclick(c->ui.button[i], &on_click_set_brush_id);
     }
-    c->ui.button[15] = NULL;
+    c->ui.button[16] = NULL;
 }
 
 void init_buttons(core_t *c)
@@ -152,13 +155,14 @@ void init_ui(core_t *c)
 
 void init_keys(core_t *c)
 {
-    unsigned int toggleable_keys_count = 2;
+    unsigned int toggleable_keys_count = 3;
     c->events.keys.toggleable = malloc(sizeof(switch_key_t) * (toggleable_keys_count + 1));
     c->events.keys.toggleable[toggleable_keys_count + 1].index = -1;
 
     init_toggleable_key(&c->events.keys.toggleable[0], sfKeyF11, &toggle_fullscreen);
     init_toggleable_key(&c->events.keys.toggleable[1], sfKeySpace, &toggle_pause);
     init_toggleable_key(&c->events.keys.toggleable[2], sfKeyT, &toggle_temperature_mode);
+    init_toggleable_key(&c->events.keys.toggleable[3], sfKeyP, &toggle_pressure_mode);
 }
 
 void init_map(core_t *c)
@@ -175,6 +179,11 @@ void init_map(core_t *c)
     c->map.v_buffer = sfVertexBuffer_create(c->map.nb_case, sfPoints, sfVertexBufferStream);
     c->map.grid = malloc(sizeof(voxel_t) * c->map.nb_case);
     c->map.buffer = malloc(sizeof(sfVertex) * (c->map.nb_case + 1));
+    c->map.air_dim = (sfVector2i){dim.x / AIR_CELL, dim.y / AIR_CELL};
+    c->map.air_count = c->map.air_dim.x * c->map.air_dim.y;
+    c->map.pmap = calloc(c->map.air_count, sizeof(float));
+    c->map.vx = calloc(c->map.air_count, sizeof(float));
+    c->map.vy = calloc(c->map.air_count, sizeof(float));
     for (int y = 0; y < c->map.dim.y; y++) {
         for (int x = 0; x < c->map.dim.x; x++) {
             GRID(&c->map, x, y).data = create_data(empty);
@@ -220,6 +229,7 @@ void init_game(core_t *c)
     sfRenderWindow_setPosition(c->render.window, (sfVector2i){0, 0});
     c->render.fullscreen = false;
     c->render.temperature_mode = false;
+    c->render.pressure_mode = false;
     c->clock.clock = sfClock_create();
     c->mouse.lastpos = get_mouse_pos_view(c);
     c->mouse.diff = (sfVector2i){0, 0};

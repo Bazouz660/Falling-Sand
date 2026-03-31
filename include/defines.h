@@ -25,6 +25,9 @@
     #define gravity 9
 
     #define GRID(map, gx, gy) ((map)->grid[(gy) * (map)->dim.x + (gx)])
+    #define PMAP(map, gx, gy) ((map)->pmap[(gy) * (map)->air_dim.x + (gx)])
+    #define VX(map, gx, gy) ((map)->vx[(gy) * (map)->air_dim.x + (gx)])
+    #define VY(map, gx, gy) ((map)->vy[(gy) * (map)->air_dim.x + (gx)])
 
     #define TransparentRed (sfColor){255, 0, 0, 100}
 
@@ -33,6 +36,15 @@
 
     #define MIN_TEMPERATURE -273.15
     #define MAX_TEMPERATURE 5000
+
+    #define AIR_CELL 4
+    #define AIR_LOSS 0.999f
+    #define VELOCITY_FACTOR 0.4f
+    #define VELOCITY_LOSS 0.999f
+    #define PRESSURE_ITERATIONS 4
+    #define MAX_CFL 0.9f
+    #define EXPLOSION_PRESSURE 120.0f
+    #define HEAT_PRESSURE_FACTOR 0.00005f
 
 #endif /*SAND_DEFINES*/
 

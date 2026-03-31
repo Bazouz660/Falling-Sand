@@ -24,3 +24,8 @@ void toggle_temperature_mode(core_t *c, switch_key_t *key)
 {
     c->render.temperature_mode = key->state;
 }
+
+void toggle_pressure_mode(core_t *c, switch_key_t *key)
+{
+    c->render.pressure_mode = key->state;
+}

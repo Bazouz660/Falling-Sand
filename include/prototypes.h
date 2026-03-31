@@ -176,6 +176,14 @@
     void update_wood(map_t *map, int x, int y);
     void update_fire(clock_st clock, map_t *map, int x, int y);
     void update_smoke(clock_st clock, map_t *map, int x, int y);
+    data_t create_gunpowder(void);
+    void update_gunpowder(clock_st clock, map_t *map, int x, int y);
+
+    // Pressure
+    void update_pressure(map_t *map);
+    void explode(map_t *map, int cx, int cy, int radius);
+    void apply_pressure_effects(map_t *map, int x, int y);
+    bool apply_air_velocity(map_t *map, int x, int y);
 
     // States
 bool produce_fire(map_t *map, int x, int y, data_t *data);

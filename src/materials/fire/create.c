@@ -18,6 +18,7 @@ data_t create_fire(void)
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 1200;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 1.0;
     data.life_time = 5.0;
     data.life_counter = 0;

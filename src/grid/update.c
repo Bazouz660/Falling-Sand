@@ -26,9 +26,11 @@ static void update_voxel(core_t *c, map_t *map, int x, int y)
         case wood:        update_wood(map, x, y); break;
         case fire:        update_fire(c->clock, map, x, y); break;
         case smoke:       update_smoke(c->clock, map, x, y); break;
+        case gunpowder:  update_gunpowder(c->clock, map, x, y); break;
         default: break;
     }
     update_heat(map, x, y);
+    apply_pressure_effects(map, x, y);
 }
 
 void update_grid(core_t *c)
@@ -38,6 +40,7 @@ void update_grid(core_t *c)
     bool ran = (frame_counter % 2 == 0 ? 0: 1);
 
     if (!c->events.paused) {
+        update_pressure(&c->map);
         for (int y = 0; y < c->map.dim.y; y++) {
             if (ran) {
                 for (int x = c->map.dim.x - 1; x >= 0 ; x--)

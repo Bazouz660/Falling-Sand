@@ -17,6 +17,7 @@ data_t create_empty(void)
     data.color = sfBlack;
     data.temperature = 20;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 0.026;
     data.state = -1;
     data.inertia = (sfVector2i){0, 0};

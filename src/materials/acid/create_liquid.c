@@ -19,6 +19,7 @@ data_t create_acid(void)
     data.inertia = (sfVector2i){0, 0};
     data.temperature = 20;
     data.flammability = 0;
+    data.pressure = 0;
     data.conductivity = 0.2;
     data.life_time = INFINITY;
     data.life_counter = 0;

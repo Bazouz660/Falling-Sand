@@ -66,6 +66,9 @@ data_t create_data(int id)
         case smoke:
             data = create_smoke();
             break;
+        case gunpowder:
+            data = create_gunpowder();
+            break;
         default:
             data = create_empty();
             break;
